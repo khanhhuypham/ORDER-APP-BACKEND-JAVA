@@ -31,15 +31,15 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public PaymentResponseDTO create(Long id, PaymentRequestDTO dto) {
         Payment payment = paymentRepo.save(Payment.builder()
-                .id(id)
-                .discount(dto.getDiscount())
-                .tax(dto.getTax())
-                .surcharge(dto.getSurcharge())
-                .amount(dto.getAmount())
-                .net_amount(dto.getNet_amount())
-                .method(dto.getMethod())
-                .status(dto.getStatus())
-                .build());
+            .id(id)
+            .discount(dto.getDiscount())
+            .tax(dto.getTax())
+            .surcharge(dto.getSurcharge())
+            .amount(dto.getAmount())
+            .net_amount(dto.getNet_amount())
+            .method(dto.getMethod())
+            .status(dto.getStatus())
+            .build());
         return new PaymentResponseDTO(payment);
     }
 

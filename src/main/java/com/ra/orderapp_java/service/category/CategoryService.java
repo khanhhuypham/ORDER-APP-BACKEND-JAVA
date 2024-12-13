@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface CategoryService {
     List<CategoryResponseDTO> findAll();
-    CategoryResponseDTO create(CategoryRequestDTO dto);
+    CategoryResponseDTO create(Long id,CategoryRequestDTO dto);
     CategoryResponseDTO findById(Long id);
     void delete(long id);
 }

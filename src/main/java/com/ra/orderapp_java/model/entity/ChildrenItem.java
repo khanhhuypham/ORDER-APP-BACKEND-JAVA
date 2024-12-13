@@ -32,18 +32,17 @@ public class ChildrenItem {
     @Column(name = "out_of_stock")
     private Boolean out_of_stock;
 
-    @Column(name = "description")
+    @Column(name = "description",nullable = true)
     private String description;
+
 
     @ManyToOne
     @JoinColumn(name = "unit_id",referencedColumnName = "id")
     private Unit unit;
 
-
     @ManyToOne
     @JoinColumn(name = "category_id",referencedColumnName = "id")
     private Category category;
-
 
     @OneToMany(mappedBy = "childrenItem")
     Set<ItemOnChildrenItem> items;

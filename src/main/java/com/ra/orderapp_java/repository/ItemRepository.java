@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 
-public interface FoodRepository extends JpaRepository<Item,Long> {
+public interface ItemRepository extends JpaRepository<Item,Long> {
     @Query("select f from Item f where f.name like %:keyword%")
     List<Item> searchByName(String keyword);
 }

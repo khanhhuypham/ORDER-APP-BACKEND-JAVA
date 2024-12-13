@@ -1,5 +1,6 @@
 package com.ra.orderapp_java.controller;
 
+import com.ra.orderapp_java.model.dto.GenericResponse;
 import com.ra.orderapp_java.model.dto.table.TableRequestDTO;
 import com.ra.orderapp_java.model.dto.table.TableResponseDTO;
 import com.ra.orderapp_java.model.dto.unit.UnitRequestDTO;
@@ -22,29 +23,34 @@ public class UnitController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UnitResponseDTO>> index(){
-        return new ResponseEntity<>(unitService.findAll(), HttpStatus.OK);
+    public ResponseEntity<GenericResponse<List<UnitResponseDTO>>> index(){
+        return new ResponseEntity<>(GenericResponse.success(unitService.findAll()), HttpStatus.OK);
     }
 
 
     @PostMapping
-    public ResponseEntity<UnitResponseDTO> create(@RequestBody UnitRequestDTO dto){
-        return new ResponseEntity<>(unitService.create(null,dto), HttpStatus.CREATED);
+    public ResponseEntity<GenericResponse<UnitResponseDTO>> create(@RequestBody UnitRequestDTO dto){
+        return new ResponseEntity<>(
+                GenericResponse.success(unitService.create(null,dto)),
+                HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable long id){
+    public ResponseEntity<GenericResponse<UnitResponseDTO>> findById(@PathVariable long id){
         UnitResponseDTO dto = unitService.findById(id);
 
-        return dto == null
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(unitService.findById(id), HttpStatus.OK);
+        return new ResponseEntity<>(
+                GenericResponse.success(dto),
+                dto == null ? HttpStatus.NOT_FOUND : HttpStatus.OK
+        );
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UnitResponseDTO> update(@PathVariable Long id, @RequestBody UnitRequestDTO dto){
-
-        return new ResponseEntity<>(unitService.create(id,dto),HttpStatus.CREATED);
+    public ResponseEntity<GenericResponse<UnitResponseDTO>> update(@PathVariable Long id, @RequestBody UnitRequestDTO dto){
+        return new ResponseEntity<>(
+            GenericResponse.success(unitService.create(id,dto)),
+            HttpStatus.CREATED
+        );
     }
 
     @DeleteMapping("/{id}")

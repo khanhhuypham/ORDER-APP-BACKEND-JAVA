@@ -1,5 +1,6 @@
 package com.ra.orderapp_java.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ra.orderapp_java.model.entity.JoinEntity.ItemOnChildrenItem;
 import com.ra.orderapp_java.model.entity.JoinEntity.OrderOnItem;
 import jakarta.persistence.*;
@@ -29,14 +30,13 @@ public class Item {
     @Column(name = "price")
     private Double price;
 
-
     @Column(name = "out_of_stock")
-    private boolean out_of_stock;
+    private Boolean out_of_stock;
 
     @Column(name = "sell_by_weight")
-    private boolean sell_by_weight;
+    private Boolean sell_by_weight;
 
-    @Column(name = "description")
+    @Column(name = "description",nullable = true)
     private String description;
 
     @ManyToOne
@@ -52,6 +52,7 @@ public class Item {
     private Printer printer;
 
     @OneToMany(mappedBy = "item")
+    @JsonIgnore
     Set<ItemOnChildrenItem> children;
 
     @OneToMany(mappedBy = "item")

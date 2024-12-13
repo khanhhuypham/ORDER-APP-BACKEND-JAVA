@@ -1,5 +1,6 @@
 package com.ra.orderapp_java.model.entity.JoinEntity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ra.orderapp_java.model.entity.ChildrenItem;
 import com.ra.orderapp_java.model.entity.Item;
 import jakarta.persistence.*;
@@ -37,11 +38,13 @@ public class ItemOnChildrenItem {
     @ManyToOne
     @MapsId("itemId")
     @JoinColumn(name = "item_id")
+    @JsonIgnore
     Item item;
 
     @ManyToOne
     @MapsId("childrenItemId")
     @JoinColumn(name = "children_item_id")
+    @JsonIgnore
     ChildrenItem childrenItem;
 
 
@@ -54,4 +57,18 @@ public class ItemOnChildrenItem {
     @Column(name = "temporary_price")
     private Double temporary_price;
 
+    public ItemOnChildrenItem(Item item,ChildrenItem childrenItem) {
+        // Create ItemOnChildrenItemKey
+        ItemOnChildrenItemKey id = new ItemOnChildrenItemKey();
+        id.setItemId(item.getId());
+        id.setChildrenItemId(childrenItem.getId());
+
+        this.id = id;
+        this.item = item;
+        this.childrenItem = childrenItem;
+        this.price = item.getPrice();
+        this.quantity = 1.0f;
+        this.temporary_price = 9.5;
+
+    }
 }

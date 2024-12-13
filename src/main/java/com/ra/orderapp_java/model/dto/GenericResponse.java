@@ -3,12 +3,13 @@ package com.ra.orderapp_java.model.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.http.HttpStatus;
 
 @Data
 @Builder
 @AllArgsConstructor
 public class GenericResponse<T> {
-    private boolean success;
+    private Integer status;
     private String message;
     private T data;
 
@@ -17,17 +18,27 @@ public class GenericResponse<T> {
     }
 
     public static <T> GenericResponse<T> success(T data) {
-        return GenericResponse.<T>builder()
-                .message("SUCCESS!")
-                .data(data)
-                .success(true)
-                .build();
+        if (data != null){
+            return GenericResponse.<T>builder()
+                    .message("SUCCESS!")
+                    .data(data)
+                    .status(HttpStatus.OK.value())
+                    .build();
+        }else{
+            return GenericResponse.<T>builder()
+                    .message("NO CONTENT!")
+                    .data(data)
+                    .status(HttpStatus.NO_CONTENT.value())
+                    .build();
+        }
+
+
     }
 
     public static <T> GenericResponse<T> error() {
         return GenericResponse.<T>builder()
                 .message("ERROR!")
-                .success(false)
+                .status(HttpStatus.BAD_REQUEST.value())
                 .build();
     }
 }

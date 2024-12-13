@@ -4,18 +4,18 @@ import com.ra.orderapp_java.model.dto.area.AreaRequestDTO;
 import com.ra.orderapp_java.model.dto.area.AreaResponseDTO;
 import com.ra.orderapp_java.model.entity.Area;
 import com.ra.orderapp_java.repository.AreaRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class AreaServiceImpl implements AreaService{
-    public final AreaRepository areaRepo;
+    private final AreaRepository areaRepo;
 
-    public AreaServiceImpl(AreaRepository areaRepo) {
-        this.areaRepo = areaRepo;
-    }
 
     @Override
     public List<AreaResponseDTO> findAll() {
@@ -24,7 +24,6 @@ public class AreaServiceImpl implements AreaService{
         for(Area area : areaRepo.findAll()) {
             list.add(new AreaResponseDTO(area));
         }
-
         return list;
     }
 
@@ -32,7 +31,6 @@ public class AreaServiceImpl implements AreaService{
     @Override
     public AreaResponseDTO create(Long id,AreaRequestDTO dto) {
         System.out.println(id);
-
 
         Area savedArea = areaRepo.save(Area.builder()
                 .id(id)

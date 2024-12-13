@@ -9,18 +9,16 @@ import com.ra.orderapp_java.model.entity.Printer;
 import com.ra.orderapp_java.model.entity.TableEntity;
 import com.ra.orderapp_java.repository.AreaRepository;
 import com.ra.orderapp_java.repository.PrinterRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PrinterServiceImpl implements PrinterService{
-    public final PrinterRepository printerRepo;
-
-    public PrinterServiceImpl(PrinterRepository printerRepo) {
-        this.printerRepo = printerRepo;
-    }
+    private final PrinterRepository printerRepo;
 
 
     @Override
