@@ -1,15 +1,21 @@
 package com.ra.orderapp_java.controller;
 
 import com.ra.orderapp_java.model.dto.GenericResponse;
+import com.ra.orderapp_java.model.dto.PaginationDTO;
+import com.ra.orderapp_java.model.dto.food.ItemQueryDTO;
 import com.ra.orderapp_java.model.dto.food.ItemRequestDTO;
 import com.ra.orderapp_java.model.dto.food.ItemResponseDTO;
 
 import com.ra.orderapp_java.service.item.ItemService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 
 @RestController
@@ -23,29 +29,15 @@ public class ItemController {
     }
 
     @GetMapping
-    public ResponseEntity<GenericResponse<List<ItemResponseDTO>>> index(){
+    public ResponseEntity<GenericResponse<PaginationDTO<ItemResponseDTO>>> index(@ModelAttribute ItemQueryDTO dto){
         return new ResponseEntity<>(
-            GenericResponse.success(itemService.findAll()),
+            GenericResponse.success(
+                itemService.findAll(dto)
+            ),
             HttpStatus.OK
         );
+
     }
-
-//    @GetMapping("/search")
-//    public ResponseEntity<?> search(@RequestParam(name = "keyword") String keyword){
-//        List<FoodResponseDTO> responseDTOS = itemService.searchByFoodName(keyword);
-//        return new ResponseEntity<>(responseDTOS, HttpStatus.OK);
-//    }
-
-//    @GetMapping
-//    public ResponseEntity<?> index(
-//            @RequestParam(defaultValue = "0",name = "page") int page,
-//            @RequestParam(defaultValue = "3",name = "limit") int limit,
-//            @RequestParam(defaultValue = "",name = "search_key") String search_key
-//    ){
-//        Pageable pageable = PageRequest.of(page,limit);
-//        Page<ProductResponseDTO> pageObj = productService.pagination(pageable,search_key);
-//        return new ResponseEntity<>(pageObj,HttpStatus.OK);
-//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<GenericResponse<ItemResponseDTO>> findById(@PathVariable Long id){

@@ -13,7 +13,7 @@ public class CategoryResponseDTO {
 
     private Long id;
     private String name;
-    private boolean active;
+    private Boolean active;
     private String description;
 
     public CategoryResponseDTO(Category category) {

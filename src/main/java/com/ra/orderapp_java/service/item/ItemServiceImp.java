@@ -1,7 +1,9 @@
 package com.ra.orderapp_java.service.item;
 
 
+import com.ra.orderapp_java.model.dto.PaginationDTO;
 import com.ra.orderapp_java.model.dto.childrenItem.ChildrenItemResponseDTO;
+import com.ra.orderapp_java.model.dto.food.ItemQueryDTO;
 import com.ra.orderapp_java.model.dto.food.ItemRequestDTO;
 import com.ra.orderapp_java.model.dto.food.ItemResponseDTO;
 import com.ra.orderapp_java.model.entity.*;
@@ -11,6 +13,7 @@ import com.ra.orderapp_java.repository.*;
 import com.ra.orderapp_java.repository.joinEntity.ItemOnChildrenItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -29,30 +32,38 @@ public class ItemServiceImp implements ItemService {
 
 
     @Override
-    public List<ItemResponseDTO> findAll() {
+    public PaginationDTO<ItemResponseDTO> findAll(ItemQueryDTO dto) {
 
         List<ItemResponseDTO> list = new ArrayList();
-        for(Item item : itemRepo.findAll()) {
+        Pageable pageable  = PageRequest.of(dto.getPage() - 1, dto.getLimit());
+
+        Page<Item> result = itemRepo.findAllByCondition(
+            dto.getCategory_id() <= 0 ? 0L : dto.getCategory_id(),
+            dto.getSearch_key(),
+            pageable
+        );
+
+        for(Item item : result) {
             // Fetch all ChildrenItems in a single query
             List<ChildrenItem> childrenItemList = childrenItemRepo.findByParentId(item.getId());
             list.add(new ItemResponseDTO(item,childrenItemList));
         }
-
-        return list;
+        return PaginationDTO.input(list,result);
     }
 
-    @Override
-    public Page<ItemResponseDTO> pagination(Pageable pageable, String search_key){
-        List<ItemResponseDTO> list = new ArrayList();
 
-        for(Item item : itemRepo.findAll(pageable)) {
-            // Fetch all ChildrenItems in a single query
-            List<ChildrenItem> childrenItemList = childrenItemRepo.findByParentId(item.getId());
-            list.add(new ItemResponseDTO(item,childrenItemList));
-        }
-
-        return null;
-    }
+//    @Override
+//    public Page<ItemResponseDTO> pagination(Pageable pageable, String search_key){
+//        List<ItemResponseDTO> list = new ArrayList();
+//
+//        for(Item item : itemRepo.findAll(pageable)) {
+//            // Fetch all ChildrenItems in a single query
+//            List<ChildrenItem> childrenItemList = childrenItemRepo.findByParentId(item.getId());
+//            list.add(new ItemResponseDTO(item,childrenItemList));
+//        }
+//
+//        return null;
+//    }
 
 
     @Override

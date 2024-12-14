@@ -31,8 +31,6 @@ public class GenericResponse<T> {
                     .status(HttpStatus.NO_CONTENT.value())
                     .build();
         }
-
-
     }
 
     public static <T> GenericResponse<T> error() {

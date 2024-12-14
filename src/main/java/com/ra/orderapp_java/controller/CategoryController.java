@@ -28,7 +28,7 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<GenericResponse<List<CategoryResponseDTO>>> index(@RequestParam(defaultValue = "-1",name = "status") int status){
         return new ResponseEntity<>(
-            GenericResponse.success(categoryService.findAll()),
+            GenericResponse.success(categoryService.findAll(status)),
             HttpStatus.OK
         );
     }
@@ -50,7 +50,7 @@ public class CategoryController {
             dto == null ? HttpStatus.NOT_FOUND : HttpStatus.OK
         );
     }
-
+    @CrossOrigin()
     @PutMapping("/{id}")
     public ResponseEntity<GenericResponse<CategoryResponseDTO>> update(@PathVariable Long id, @RequestBody CategoryRequestDTO dto){
         return new ResponseEntity<>(
