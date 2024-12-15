@@ -18,7 +18,7 @@ public class PrinterRequestDTO {
     private Integer connection_type;
     private Integer print_number;
     private Boolean is_print_each_paper;
-    private Boolean is_active;
+    private Boolean active;
     private PRINTER_TYPE type;
 
 //    public PrinterRequestDTO(Printer printer) {

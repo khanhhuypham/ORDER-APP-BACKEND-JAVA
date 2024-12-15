@@ -1,6 +1,7 @@
 package com.ra.orderapp_java.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ra.orderapp_java.model.constant.CATEGORY_TYPE;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import lombok.*;
@@ -25,8 +26,9 @@ public class Category {
     @Column(name="active")
     private Boolean active;
 
-    @Column(name="type")
-    private Integer type;
+    @Column(name="type",columnDefinition = "integer default 1")
+    @Enumerated(EnumType.ORDINAL)
+    private CATEGORY_TYPE type = CATEGORY_TYPE.PROCESSED;
 
     @Column(name="description")
     private String description;

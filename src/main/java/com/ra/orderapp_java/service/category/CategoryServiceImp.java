@@ -46,6 +46,7 @@ public class CategoryServiceImp implements CategoryService{
                 .id(id)
                 .name(dto.getName())
                 .active(dto.getActive())
+                .type(dto.getType())
                 .build()
         );
 

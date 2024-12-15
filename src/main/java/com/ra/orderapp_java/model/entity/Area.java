@@ -20,7 +20,7 @@ public class Area {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name",length = 100)
+    @Column(name = "name",length = 10,unique = true)
     private String name;
 
     @Column(name = "active")
@@ -29,5 +29,13 @@ public class Area {
     @OneToMany(mappedBy = "area", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<TableEntity> tables;
+
+
+//    @PrePersist
+//    public void setDefaultStatus() {
+//        if (this.status == null) {
+//            this.status = TABLE_STATUS.CLOSE;
+//        }
+//    }
 
 }

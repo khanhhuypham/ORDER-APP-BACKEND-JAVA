@@ -2,6 +2,7 @@ package com.ra.orderapp_java.model.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ra.orderapp_java.model.constant.TABLE_STATUS;
 import com.ra.orderapp_java.model.entity.JoinEntity.OrderOnItem;
 import com.ra.orderapp_java.model.entity.JoinEntity.OrderOnTable;
 import jakarta.persistence.*;
@@ -21,13 +22,14 @@ public class TableEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name",length = 100,unique = true)
+    @Column(name = "name",length = 10,unique = true)
     private String name;
 
-    @Column(name = "status",nullable = true)
-    private Integer status;
+    @Column(name = "status",nullable = true,columnDefinition = "integer default 0")
+    @Enumerated(EnumType.ORDINAL)
+    private TABLE_STATUS status = TABLE_STATUS.CLOSE;
 
-    @Column(name = "active")
+    @Column(name = "active",columnDefinition = "boolean default false")
     private Boolean active;
 
     @Column(name = "total_slot", nullable = true)
@@ -38,9 +40,11 @@ public class TableEntity {
     @JsonIgnore
     private Area area;
 
-
     @OneToMany(mappedBy = "table")
     @JsonIgnore
     Set<OrderOnTable> orders;
+
+
+
 
 }

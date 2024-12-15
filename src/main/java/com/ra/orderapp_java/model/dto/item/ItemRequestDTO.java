@@ -1,8 +1,6 @@
-package com.ra.orderapp_java.model.dto.food;
+package com.ra.orderapp_java.model.dto.item;
 
 import com.ra.orderapp_java.model.dto.childrenItem.ChildrenItemResponseDTO;
-import com.ra.orderapp_java.model.entity.Category;
-import com.ra.orderapp_java.model.entity.Item;
 
 import lombok.*;
 

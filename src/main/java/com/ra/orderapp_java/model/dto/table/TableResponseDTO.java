@@ -1,6 +1,7 @@
 package com.ra.orderapp_java.model.dto.table;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ra.orderapp_java.model.constant.TABLE_STATUS;
 import com.ra.orderapp_java.model.dto.area.AreaResponseDTO;
 import com.ra.orderapp_java.model.entity.Area;
 import com.ra.orderapp_java.model.entity.TableEntity;
@@ -25,7 +26,9 @@ public class TableResponseDTO {
     public TableResponseDTO(TableEntity table) {
         this.id = table.getId();
         this.name = table.getName();
-        this.status = table.getStatus();
+        if (table.getStatus() != null){
+            this.status = table.getStatus().getValue();
+        }
         this.active = table.getActive();
         this.area_id = table.getArea().getId();
         this.total_slot = table.getTotal_slot();

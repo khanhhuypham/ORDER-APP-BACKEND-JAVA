@@ -20,15 +20,15 @@ public class AreaResponseDTO {
     private String name;
     private Boolean active;
 
-    private List<TableResponseDTO> tables;
+//    private List<TableResponseDTO> tables;
 
     public AreaResponseDTO(Area area) {
         this.id = area.getId();
         this.name = area.getName();
         this.active = area.getActive();
-        this.tables = area.getTables().stream()
-                .map(TableResponseDTO::new)
-                .collect(Collectors.toList());
+//        this.tables = area.getTables().stream()
+//                .map(TableResponseDTO::new)
+//                .collect(Collectors.toList());
     }
 
 

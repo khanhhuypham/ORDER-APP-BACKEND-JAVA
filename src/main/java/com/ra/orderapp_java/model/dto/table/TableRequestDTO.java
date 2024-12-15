@@ -1,6 +1,7 @@
 package com.ra.orderapp_java.model.dto.table;
 
 
+import com.ra.orderapp_java.model.constant.TABLE_STATUS;
 import lombok.*;
 
 import java.lang.reflect.Field;
@@ -12,11 +13,9 @@ import java.lang.reflect.Field;
 @Builder
 public class TableRequestDTO {
     private String name;
-    private Integer status;
     private Boolean active;
     private Long area_id;
     private Long total_slot;
-
 
     public String toString() {
         StringBuilder result = new StringBuilder();

@@ -23,8 +23,8 @@ public class PrinterResponseDTO {
     private Integer connection_type;
     private Integer print_number;
     private Boolean is_print_each_paper;
-    private Boolean is_active;
-    private PRINTER_TYPE type;
+    private Boolean active;
+    private Integer type;
 
     public PrinterResponseDTO(Printer printer) {
         this.id = printer.getId();
@@ -35,7 +35,7 @@ public class PrinterResponseDTO {
         this.connection_type = printer.getConnection_type();
         this.print_number = printer.getPrint_number();
         this.is_print_each_paper = printer.getIs_print_each_paper();
-        this.is_active = printer.getIs_active();
-        this.type = printer.getType();
+        this.active = printer.getActive();
+        this.type = printer.getType().getValue();
     }
 }

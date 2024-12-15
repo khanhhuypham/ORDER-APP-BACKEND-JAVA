@@ -1,7 +1,9 @@
 package com.ra.orderapp_java.controller.payment;
 
+import com.ra.orderapp_java.model.dto.GenericResponse;
 import com.ra.orderapp_java.model.dto.payment.ChargeRequestDTO1;
 import com.ra.orderapp_java.model.dto.payment.ProductRequestDTO;
+import com.ra.orderapp_java.model.dto.payment.StripeCheckoutDTO;
 import com.ra.orderapp_java.model.dto.payment.StripeResponse;
 import com.ra.orderapp_java.service.payment.StripeService;
 import com.ra.orderapp_java.util.ProductDAO;
@@ -21,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 //@RequiredArgsConstructor
-@RequestMapping("api/v1/charge")
+@RequestMapping("api/v1")
 public class CheckoutController {
 
     private final StripeService stripeService;
@@ -58,19 +60,28 @@ public class CheckoutController {
     }
 
 
-    @PostMapping()
-    public ResponseEntity<StripeResponse> checkoutProducts(@Valid @RequestBody ProductRequestDTO productRequest) {
-        StripeResponse stripeResponse = stripeService.checkout(productRequest);
-        return ResponseEntity.status(HttpStatus.OK).body(stripeResponse);
+    @PostMapping("/stripe-host-checkout")
+    public ResponseEntity<GenericResponse<?>> checkoutProducts(@Valid @RequestBody StripeCheckoutDTO dto) {
+        StripeResponse stripeResponse = stripeService.checkout(dto);
+
+        return new ResponseEntity<>(
+            GenericResponse.success(stripeResponse),
+            HttpStatus.CREATED
+        );
     }
 
-    @GetMapping("/checkout")
+    @PostMapping("/host -checkout")
     public ResponseEntity<?> integratedCheckout(@RequestBody ChargeRequestDTO1 dto) throws StripeException {
         String stripeResponse = stripeService.integratedCheckout(dto);
 //        System.out.println(dto.toString());
 
+//        GenericResponse.success(dto)
 
-        return ResponseEntity.status(HttpStatus.OK).body(stripeResponse);
+        return new ResponseEntity<>(
+                GenericResponse.success(dto),
+                HttpStatus.CREATED
+        );
+
     }
 
 }

@@ -19,7 +19,7 @@ public class UserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("pham khanh huy: " + username);
+
         User user = userRepo.getUserByUsername(username);
         UserPrinciple userPrinciple = new UserPrinciple();
         userPrinciple.setUser(user);

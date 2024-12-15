@@ -30,10 +30,10 @@ public class Item {
     @Column(name = "price")
     private Double price;
 
-    @Column(name = "out_of_stock")
+    @Column(name = "out_of_stock", columnDefinition = "boolean default false")
     private Boolean out_of_stock;
 
-    @Column(name = "sell_by_weight")
+    @Column(name = "sell_by_weight", columnDefinition = "boolean default false")
     private Boolean sell_by_weight;
 
     @Column(name = "description",nullable = true)

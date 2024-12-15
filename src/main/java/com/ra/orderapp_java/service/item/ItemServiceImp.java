@@ -3,9 +3,9 @@ package com.ra.orderapp_java.service.item;
 
 import com.ra.orderapp_java.model.dto.PaginationDTO;
 import com.ra.orderapp_java.model.dto.childrenItem.ChildrenItemResponseDTO;
-import com.ra.orderapp_java.model.dto.food.ItemQueryDTO;
-import com.ra.orderapp_java.model.dto.food.ItemRequestDTO;
-import com.ra.orderapp_java.model.dto.food.ItemResponseDTO;
+import com.ra.orderapp_java.model.dto.item.ItemQueryDTO;
+import com.ra.orderapp_java.model.dto.item.ItemRequestDTO;
+import com.ra.orderapp_java.model.dto.item.ItemResponseDTO;
 import com.ra.orderapp_java.model.entity.*;
 
 import com.ra.orderapp_java.model.entity.JoinEntity.ItemOnChildrenItem;

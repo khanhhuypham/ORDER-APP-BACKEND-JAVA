@@ -18,6 +18,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -43,7 +49,7 @@ public class WebSecurityConfig {
 //                    auth.requestMatchers("/api/v1/admin").hasAnyAuthority("ADMIN","SUB_ADMIN");
 //                    auth.requestMatchers("/api/v1/cart").hasAuthority("USER");
 //                    auth.requestMatchers("/api/v1/user","/api/v1/auth/**").permitAll();
-                    auth.requestMatchers("**").permitAll();
+                    auth.requestMatchers("/**").permitAll();
                 }).sessionManagement(auth->auth.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(auth->auth.authenticationEntryPoint(jwtEntryPoint)
                         .accessDeniedHandler(customAccessDeniedHandler)).
@@ -63,4 +69,28 @@ public class WebSecurityConfig {
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedOrigin("*"); // Cấu hình origins cho phù hợp với yêu cầu của bạn
+        config.addAllowedHeader("*"); // Chấp nhận tất cả các header
+        config.addAllowedMethod("*"); // Chấp nhận tất cả các phương thức HTTP
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
+
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+//        configuration.setAllowedMethods(Arrays.asList("*"));
+//        configuration.setAllowedHeaders(Arrays.asList("*"));
+//        configuration.setAllowCredentials(false);
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
 }

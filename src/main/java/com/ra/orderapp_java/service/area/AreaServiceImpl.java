@@ -18,10 +18,14 @@ public class AreaServiceImpl implements AreaService{
 
 
     @Override
-    public List<AreaResponseDTO> findAll() {
+    public List<AreaResponseDTO> findAll(Boolean active) {
 
         List<AreaResponseDTO> list = new ArrayList();
-        for(Area area : areaRepo.findAll()) {
+
+        for(Area area : (active != null
+            ? areaRepo.findActiveArea(active)
+            : areaRepo.findAll()
+        )){
             list.add(new AreaResponseDTO(area));
         }
         return list;

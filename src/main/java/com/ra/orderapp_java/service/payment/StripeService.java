@@ -1,10 +1,7 @@
 package com.ra.orderapp_java.service.payment;
 
-import com.ra.orderapp_java.model.dto.payment.ChargeRequestDTO1;
-import com.ra.orderapp_java.model.dto.payment.ChargeRequestDTO2;
+import com.ra.orderapp_java.model.dto.payment.*;
 
-import com.ra.orderapp_java.model.dto.payment.ProductRequestDTO;
-import com.ra.orderapp_java.model.dto.payment.StripeResponse;
 import com.ra.orderapp_java.util.StripeCustomerUtil;
 import com.stripe.Stripe;
 import com.stripe.exception.*;
@@ -120,36 +117,37 @@ public class StripeService {
     }
 
 
-    public StripeResponse checkout(ProductRequestDTO request) {
+    public StripeResponse checkout(StripeCheckoutDTO dto) {
 
         Stripe.apiKey = secretKey;
 
         SessionCreateParams.Builder paramsBuilder = SessionCreateParams.builder()
             .setMode(SessionCreateParams.Mode.PAYMENT)
-            .setSuccessUrl("http://localhost:8080/success")
-            .setCancelUrl("http://localhost:8080/cancel");
+            .setSuccessUrl(dto.getSuccessUrl())
+            .setCancelUrl(dto.getCancelUrl());
 //            .setInvoiceCreation(SessionCreateParams.InvoiceCreation.builder().setEnabled(true).build())
 
-        for (int i = 0; i < 5; i++) {
+        System.out.println(dto.getItems());
+
+        for (ProductRequestDTO product: dto.getItems()){
             SessionCreateParams.LineItem.PriceData.ProductData productData =
                 SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                    .setName(request.getName())
+                    .setName(product.getName())
                     .build();
 
             SessionCreateParams.LineItem.PriceData priceData = SessionCreateParams.LineItem.PriceData.builder()
-                .setCurrency(request.getCurrency() != null ? request.getCurrency() : "USD")
-                .setUnitAmount(request.getAmount())
+                .setCurrency(product.getCurrency() != null ? product.getCurrency() : "USD")
+                .setUnitAmount(product.getAmount())
                 .setProductData(productData)
                 .build();
 
             SessionCreateParams.LineItem lineItem = SessionCreateParams.LineItem.builder()
-                .setQuantity(request.getQuantity())
+                .setQuantity(product.getQuantity())
                 .setPriceData(priceData)
                 .build();
 
             paramsBuilder.addLineItem(lineItem);
         }
-
 
         Session session = null;
 
@@ -157,7 +155,6 @@ public class StripeService {
             session = Session.create(paramsBuilder.build());
         }catch (StripeException e){
             logger.error(e.getMessage());
-
         }
 
         return StripeResponse.builder()

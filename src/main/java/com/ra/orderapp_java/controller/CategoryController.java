@@ -50,7 +50,7 @@ public class CategoryController {
             dto == null ? HttpStatus.NOT_FOUND : HttpStatus.OK
         );
     }
-    @CrossOrigin()
+//    @CrossOrigin()
     @PutMapping("/{id}")
     public ResponseEntity<GenericResponse<CategoryResponseDTO>> update(@PathVariable Long id, @RequestBody CategoryRequestDTO dto){
         return new ResponseEntity<>(

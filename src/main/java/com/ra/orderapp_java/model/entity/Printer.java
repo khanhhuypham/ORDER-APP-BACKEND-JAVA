@@ -42,8 +42,8 @@ public class Printer {
     @Column(name = "is_print_each_paper")
     private Boolean is_print_each_paper;
 
-    @Column(name = "is_active")
-    private Boolean is_active;
+    @Column(name = "active")
+    private Boolean active;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type")

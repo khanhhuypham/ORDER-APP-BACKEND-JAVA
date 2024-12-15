@@ -1,4 +1,4 @@
-package com.ra.orderapp_java.model.dto.food;
+package com.ra.orderapp_java.model.dto.item;
 
 import jakarta.validation.constraints.Min;
 import lombok.*;

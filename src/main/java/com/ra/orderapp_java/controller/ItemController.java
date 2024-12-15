@@ -2,20 +2,14 @@ package com.ra.orderapp_java.controller;
 
 import com.ra.orderapp_java.model.dto.GenericResponse;
 import com.ra.orderapp_java.model.dto.PaginationDTO;
-import com.ra.orderapp_java.model.dto.food.ItemQueryDTO;
-import com.ra.orderapp_java.model.dto.food.ItemRequestDTO;
-import com.ra.orderapp_java.model.dto.food.ItemResponseDTO;
+import com.ra.orderapp_java.model.dto.item.ItemQueryDTO;
+import com.ra.orderapp_java.model.dto.item.ItemRequestDTO;
+import com.ra.orderapp_java.model.dto.item.ItemResponseDTO;
 
 import com.ra.orderapp_java.service.item.ItemService;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 
 @RestController

@@ -1,4 +1,4 @@
-package com.ra.orderapp_java.model.dto.food;
+package com.ra.orderapp_java.model.dto.item;
 
 
 import com.ra.orderapp_java.model.dto.childrenItem.ChildrenItemResponseDTO;
@@ -23,7 +23,9 @@ public class ItemResponseDTO {
     private boolean sell_by_weight;
     private String description;
     private Long category_id;
+    private String category_name;
     private String unit_type;
+    private Long unit_id;
     private Long printer_id;
     List<ChildrenItemResponseDTO> children;
 
@@ -37,7 +39,9 @@ public class ItemResponseDTO {
         this.description = item.getDescription();
         this.printer_id = item.getPrinter().getId();
         this.category_id = item.getCategory().getId();
+        this.category_name = item.getCategory().getName();
         this.unit_type = item.getUnit().getName();
+        this.unit_id = item.getUnit().getId();
         this.children = list.stream().map(ChildrenItemResponseDTO::new).collect(Collectors.toList());
     }
 }

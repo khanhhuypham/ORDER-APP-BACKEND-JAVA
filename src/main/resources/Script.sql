@@ -141,12 +141,12 @@ INSERT INTO unit (name) VALUES
                             ('teaspoon');
 
 -- Insert data into the Printer table
-INSERT INTO printer (name, printer_name, ip_address, port, connection_type, print_number, is_print_each_paper, is_active, type) VALUES
-                                                                                                                                    ('Office Printer 1', 'HP LaserJet Pro M404', '192.168.1.100', 9100, 1, 1, 1, 1, 1),  -- Example: Network, Enabled, Laser
-                                                                                                                                    ('Kitchen Printer', 'Epson TM-T20II', '192.168.1.101', 9100, 1, 1, 0, 1, 2),  -- Example: Network, Enabled, Receipt
-                                                                                                                                    ('Shipping Label Printer', 'Zebra ZD420', '192.168.1.102', 9100, 1, 1, 1, 1, 3), -- Example: Network, Enabled, Label
-                                                                                                                                    ('Front Desk Printer', 'Brother HL-L2395DW', '192.168.1.103', 9100, 1, 2, 1, 0, 1),  -- Example: Network, Disabled, Laser
-                                                                                                                                    ('USB Printer', 'Canon Pixma TS6420', '192.168.1.103', 9100, 2, 1, 1, 1, 4);  -- Example: USB, Enabled, Inkjet
+INSERT INTO printer (name, printer_name, ip_address, port, connection_type, print_number, is_print_each_paper, active, type) VALUES
+('Office Printer 1', 'HP LaserJet Pro M404', '192.168.1.100', 9100, 1, 1, 1, 1, 1),  -- Example: Network, Enabled, Laser
+('Kitchen Printer', 'Epson TM-T20II', '192.168.1.101', 9100, 1, 1, 0, 1, 2),  -- Example: Network, Enabled, Receipt
+('Shipping Label Printer', 'Zebra ZD420', '192.168.1.102', 9100, 1, 1, 1, 1, 3), -- Example: Network, Enabled, Label
+('Front Desk Printer', 'Brother HL-L2395DW', '192.168.1.103', 9100, 1, 2, 1, 0, 1),  -- Example: Network, Disabled, Laser
+('USB Printer', 'Canon Pixma TS6420', '192.168.1.103', 9100, 2, 1, 1, 1, 4);  -- Example: USB, Enabled, Inkjet
 
 
 

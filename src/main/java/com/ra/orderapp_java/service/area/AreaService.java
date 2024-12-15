@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface AreaService {
-    List<AreaResponseDTO> findAll();
+    List<AreaResponseDTO> findAll(Boolean active);
     AreaResponseDTO create(Long id,AreaRequestDTO dto);
     AreaResponseDTO findById(Long id);
     void delete(long id);

@@ -42,7 +42,7 @@ public class PrinterServiceImpl implements PrinterService{
                 .connection_type(dto.getConnection_type())
                 .print_number(dto.getPrint_number())
                 .is_print_each_paper(dto.getIs_print_each_paper())
-                .is_active(dto.getIs_active())
+                .active(dto.getActive())
                 .type(dto.getType())
                 .build());
         return new PrinterResponseDTO(printer);
