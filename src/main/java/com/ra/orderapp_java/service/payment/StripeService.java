@@ -117,12 +117,16 @@ public class StripeService {
     }
 
 
-    public StripeResponse checkout(StripeCheckoutDTO dto) {
+    public StripeResponse checkout(StripeCheckoutDTO dto) throws StripeException {
 
         Stripe.apiKey = secretKey;
 
+        // Start by finding an existing customer record from Stripe or creating a new one if needed
+        Customer customer = customer = StripeCustomerUtil.findOrCreateCustomer(dto.getEmail(), dto.getName());
+
         SessionCreateParams.Builder paramsBuilder = SessionCreateParams.builder()
             .setMode(SessionCreateParams.Mode.PAYMENT)
+            .setCustomer(customer.getId())
             .setSuccessUrl(dto.getSuccessUrl())
             .setCancelUrl(dto.getCancelUrl());
 //            .setInvoiceCreation(SessionCreateParams.InvoiceCreation.builder().setEnabled(true).build())
@@ -165,7 +169,7 @@ public class StripeService {
                 .build();
     }
 
-    public String integratedCheckout(ChargeRequestDTO1 dto) throws StripeException {
+    public String integratedCheckout(StripeCheckoutDTO dto) throws StripeException {
         Customer customer = customer = StripeCustomerUtil.findOrCreateCustomer(dto.getEmail(), dto.getName());
 
         PaymentIntent paymentIntent;
@@ -173,14 +177,14 @@ public class StripeService {
             // If invoice is not needed, create a PaymentIntent directly and send it to the client
             PaymentIntentCreateParams params =
                 PaymentIntentCreateParams.builder()
-                    .setAmount(100L)
+                    .setAmount(dto.calculateOrderAmount())
                     .setCurrency("usd")
                     .setCustomer(customer.getId())
                     .setAutomaticPaymentMethods(
-                            PaymentIntentCreateParams.AutomaticPaymentMethods
-                                    .builder()
-                                    .setEnabled(true)
-                                    .build()
+                        PaymentIntentCreateParams.AutomaticPaymentMethods
+                            .builder()
+                            .setEnabled(true)
+                            .build()
                     )
                     .build();
 
@@ -194,7 +198,7 @@ public class StripeService {
             Invoice invoice = Invoice.create(invoiceCreateParams);
 
             // Add each item to the invoice one by one
-            for (ProductRequestDTO product : dto.getProducts()) {
+            for (ProductRequestDTO product : dto.getItems()) {
 
                 // Look for existing Product in Stripe before creating a new one
                 Product stripeProduct;
@@ -218,14 +222,14 @@ public class StripeService {
                 // Create an invoice line item using the product object for the line item
                 InvoiceItemCreateParams invoiceItemCreateParams = new InvoiceItemCreateParams.Builder()
                     .setInvoice(invoice.getId())
-                    .setQuantity(1L)
+                    .setQuantity(product.getQuantity())
                     .setCustomer(customer.getId())
                     .setPriceData(
                         InvoiceItemCreateParams.PriceData.builder()
-                                .setProduct(stripeProduct.getId())
-                                .setCurrency(product.getCurrency())
-                                .setUnitAmount(product.getAmount())
-                                .build())
+                            .setProduct(stripeProduct.getId())
+                            .setCurrency(product.getCurrency())
+                            .setUnitAmount(product.getAmount())
+                            .build())
                     .build();
 
                 InvoiceItem.create(invoiceItemCreateParams);
@@ -237,7 +241,7 @@ public class StripeService {
             // Retrieve the payment intent object from the invoice
             paymentIntent = PaymentIntent.retrieve(invoice.getPaymentIntent());
         }
-//
+
 //        // Send the client secret from the payment intent to the client
         return paymentIntent.getClientSecret();
     }

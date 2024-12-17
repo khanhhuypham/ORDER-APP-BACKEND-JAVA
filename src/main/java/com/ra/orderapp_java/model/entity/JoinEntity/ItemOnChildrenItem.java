@@ -38,13 +38,13 @@ public class ItemOnChildrenItem {
     @ManyToOne
     @MapsId("itemId")
     @JoinColumn(name = "item_id")
-    @JsonIgnore
+//    @JsonIgnore
     Item item;
 
     @ManyToOne
     @MapsId("childrenItemId")
     @JoinColumn(name = "children_item_id")
-    @JsonIgnore
+//    @JsonIgnore
     ChildrenItem childrenItem;
 
 

@@ -61,7 +61,7 @@ public class CheckoutController {
 
 
     @PostMapping("/stripe-host-checkout")
-    public ResponseEntity<GenericResponse<?>> checkoutProducts(@Valid @RequestBody StripeCheckoutDTO dto) {
+    public ResponseEntity<GenericResponse<?>> checkoutProducts(@Valid @RequestBody StripeCheckoutDTO dto) throws StripeException {
         StripeResponse stripeResponse = stripeService.checkout(dto);
 
         return new ResponseEntity<>(
@@ -70,15 +70,12 @@ public class CheckoutController {
         );
     }
 
-    @PostMapping("/host -checkout")
-    public ResponseEntity<?> integratedCheckout(@RequestBody ChargeRequestDTO1 dto) throws StripeException {
+    @PostMapping("/host-checkout")
+    public ResponseEntity<?> integratedCheckout(@RequestBody StripeCheckoutDTO dto) throws StripeException {
         String stripeResponse = stripeService.integratedCheckout(dto);
-//        System.out.println(dto.toString());
-
-//        GenericResponse.success(dto)
 
         return new ResponseEntity<>(
-                GenericResponse.success(dto),
+                GenericResponse.success(stripeResponse),
                 HttpStatus.CREATED
         );
 

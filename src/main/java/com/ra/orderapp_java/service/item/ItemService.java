@@ -13,7 +13,7 @@ import java.util.List;
 public interface ItemService {
     PaginationDTO<ItemResponseDTO> findAll(ItemQueryDTO dto);
     ItemResponseDTO create(Long id, ItemRequestDTO dto);
-    void addChildrenToItem(Item item, List<ChildrenItemResponseDTO> childrenList);
+    void  addChildrenToItem(Item item, List<ChildrenItemResponseDTO> childrenList);
     ItemResponseDTO findById(Long id);
-    void delete(long id);
+    void  delete(Long id);
 }

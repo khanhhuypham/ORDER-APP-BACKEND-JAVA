@@ -146,7 +146,7 @@ public class ItemServiceImp implements ItemService {
 
 
     @Override
-    public void delete(long id) {
+    public void  delete(Long id) {
         itemOnChildrenItemRepo.deleteAllByItemId(id);
         itemRepo.deleteById(id);
     }
