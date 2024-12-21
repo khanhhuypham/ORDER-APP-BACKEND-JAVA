@@ -12,10 +12,10 @@ public class StripeCustomerUtil {
 
     public static Customer findCustomerByEmail(String email) throws StripeException {
         CustomerSearchParams params =
-                CustomerSearchParams
-                        .builder()
-                        .setQuery("email:'" + email + "'")
-                        .build();
+            CustomerSearchParams
+                .builder()
+                .setQuery("email:'" + email + "'")
+                .build();
 
         CustomerSearchResult result = Customer.search(params);
 
@@ -48,15 +48,4 @@ public class StripeCustomerUtil {
         return customer;
     }
 
-
-
-    static String calculateOrderAmount(Product[] items) {
-        long total = 0L;
-
-        for (Product item : items) {
-            // Look up the application database to find the prices for the products in the given list
-            total += (long) ProductDAO.getProduct(item.getId()).getDefaultPriceObject().getUnitAmountDecimal().floatValue();
-        }
-        return String.valueOf(total);
-    }
 }

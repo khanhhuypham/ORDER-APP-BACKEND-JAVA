@@ -2,7 +2,7 @@ package com.ra.orderapp_java.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ra.orderapp_java.model.entity.JoinEntity.ItemOnChildrenItem;
-import com.ra.orderapp_java.model.entity.JoinEntity.OrderOnItem;
+import com.ra.orderapp_java.model.entity.JoinEntity.ItemOnOrder;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import lombok.*;
@@ -56,6 +56,6 @@ public class Item {
     Set<ItemOnChildrenItem> children;
 
     @OneToMany(mappedBy = "item")
-    Set<OrderOnItem> orders;
+    Set<ItemOnOrder> orders;
 
 }

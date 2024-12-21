@@ -90,17 +90,17 @@ INSERT INTO area (name, active) VALUES
 
 INSERT INTO `table` (name, status,active, area_id) VALUES
                                                        ('Table 3', 1, 1, 1),
-                                                       ('Table 4', 0, 1, 1),
-                                                       ('Table 5', 0, 1, 1),
-                                                       ('Table 6', 1, 1, 1),
-                                                       ('Table 7', 1, 1, 1),
+                                                       ('Table 4', 2, 1, 1),
+                                                       ('Table 5', 2, 1, 1),
+                                                       ('Table 6', 2, 1, 1),
+                                                       ('Table 7', 2, 1, 1),
                                                        ('Table 8', 2, 1, 2),
                                                        ('Table 9', 3, 1, 2),
-                                                       ('Table 10', 1, 1, 2),
-                                                       ('Table 11', 1, 1, 3),
+                                                       ('Table 10', 2, 1, 2),
+                                                       ('Table 11', 2, 1, 3),
                                                        ('Table 12', 2, 1, 3),
-                                                       ('Table 13', 1, 1, 3),
-                                                       ('Table 14', 1, 1, 3);
+                                                       ('Table 13', 2, 1, 3),
+                                                       ('Table 14', 2, 1, 3);
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -111,16 +111,16 @@ INSERT INTO category (name,active,type) VALUES
                                             ('Indian',1,1),
                                             ('American',1,1),
                                             ('Japanese',1,2),
-                                            ('Mexican',1,3),
-                                            ('Thai',1,3),
+                                            ('Mexican',1,0),
+                                            ('Thai',1,2),
                                             ('French',1,1),
                                             ('Greek',1,1),
                                             ('Chinese',1,2),
-                                            ('Mediterranean',1,3),
+                                            ('Mediterranean',1,2),
                                             ('Steakhouse',1,1),
                                             ('Seafood',1,2),
-                                            ('Pizza',1,3),
-                                            ('Desserts',1,3),
+                                            ('Pizza',1,2),
+                                            ('Desserts',1,2),
                                             ('Beverages',1,1);
 
 -- Insert Units
@@ -141,12 +141,12 @@ INSERT INTO unit (name) VALUES
                             ('teaspoon');
 
 -- Insert data into the Printer table
-INSERT INTO printer (name, printer_name, ip_address, port, connection_type, print_number, is_print_each_paper, active, type) VALUES
-('Office Printer 1', 'HP LaserJet Pro M404', '192.168.1.100', 9100, 1, 1, 1, 1, 1),  -- Example: Network, Enabled, Laser
-('Kitchen Printer', 'Epson TM-T20II', '192.168.1.101', 9100, 1, 1, 0, 1, 2),  -- Example: Network, Enabled, Receipt
-('Shipping Label Printer', 'Zebra ZD420', '192.168.1.102', 9100, 1, 1, 1, 1, 3), -- Example: Network, Enabled, Label
-('Front Desk Printer', 'Brother HL-L2395DW', '192.168.1.103', 9100, 1, 2, 1, 0, 1),  -- Example: Network, Disabled, Laser
-('USB Printer', 'Canon Pixma TS6420', '192.168.1.103', 9100, 2, 1, 1, 1, 4);  -- Example: USB, Enabled, Inkjet
+INSERT INTO printer (name, printer_name, ip_address, port, connection_type, print_number, is_print_each_paper, active , type) VALUES
+                                                                                                                                  ('Office Printer 1', 'HP LaserJet Pro M404', '192.168.1.100', 9100, 1, 1, 1, 1, 1),  -- Example: Network, Enabled, Laser
+                                                                                                                                  ('Kitchen Printer', 'Epson TM-T20II', '192.168.1.101', 9100, 1, 1, 0, 1, 2),  -- Example: Network, Enabled, Receipt
+                                                                                                                                  ('Shipping Label Printer', 'Zebra ZD420', '192.168.1.102', 9100, 1, 1, 1, 1, 3), -- Example: Network, Enabled, Label
+                                                                                                                                  ('Front Desk Printer', 'Brother HL-L2395DW', '192.168.1.103', 9100, 1, 2, 1, 0, 1),  -- Example: Network, Disabled, Laser
+                                                                                                                                  ('USB Printer', 'Canon Pixma TS6420', '192.168.1.103', 9100, 2, 1, 1, 1, 4);  -- Example: USB, Enabled, Inkjet
 
 
 
@@ -240,48 +240,47 @@ VALUES
     (20, 5, 'Extra Lemon', 0.99, 0, 1);
 
 -- Insert data into Parent_Item_Chilren_Item table
-INSERT INTO item_on_children_item (item_id, children_item_id,quantity)
-VALUES
-    (1, 1,2),
-    (1, 2,1),
-    (2, 11,3),
-    (2, 12,4),
-    (3, 3,5),
-    (3, 4,6),
-    (4, 13,2),
-    (4, 14,1),
-    (5, 5,2),
-    (5, 6,3),
-    (6, 15,5),
-    (6, 16,2),
-    (7, 7,1),
-    (7, 8,5),
-    (8, 17,5),
-    (8, 18,6),
-    (9, 9,2),
-    (9, 10,4),
-    (10, 19,1),
-    (10, 20,2),
-    (11, 1,5),
-    (11, 2,7),
-    (12, 11,3),
-    (12, 12,1),
-    (13, 3,9),
-    (13, 4,2),
-    (14, 13,1),
-    (14, 14,3),
-    (15, 5,5),
-    (15, 6,6),
-    (16, 15,3),
-    (16, 16,3),
-    (17, 7,2),
-    (17, 8,1),
-    (18, 17,1),
-    (18, 18,1),
-    (19, 9,5),
-    (19, 10,7),
-    (20, 19,7),
-    (20, 20,3);
+INSERT INTO item_on_children_item (item_id, children_item_id,quantity) VALUES
+                                                                           (1, 1,2),
+                                                                           (1, 2,1),
+                                                                           (2, 11,3),
+                                                                           (2, 12,4),
+                                                                           (3, 3,5),
+                                                                           (3, 4,6),
+                                                                           (4, 13,2),
+                                                                           (4, 14,1),
+                                                                           (5, 5,2),
+                                                                           (5, 6,3),
+                                                                           (6, 15,5),
+                                                                           (6, 16,2),
+                                                                           (7, 7,1),
+                                                                           (7, 8,5),
+                                                                           (8, 17,5),
+                                                                           (8, 18,6),
+                                                                           (9, 9,2),
+                                                                           (9, 10,4),
+                                                                           (10, 19,1),
+                                                                           (10, 20,2),
+                                                                           (11, 1,5),
+                                                                           (11, 2,7),
+                                                                           (12, 11,3),
+                                                                           (12, 12,1),
+                                                                           (13, 3,9),
+                                                                           (13, 4,2),
+                                                                           (14, 13,1),
+                                                                           (14, 14,3),
+                                                                           (15, 5,5),
+                                                                           (15, 6,6),
+                                                                           (16, 15,3),
+                                                                           (16, 16,3),
+                                                                           (17, 7,2),
+                                                                           (17, 8,1),
+                                                                           (18, 17,1),
+                                                                           (18, 18,1),
+                                                                           (19, 9,5),
+                                                                           (19, 10,7),
+                                                                           (20, 19,7),
+                                                                           (20, 20,3);
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -318,31 +317,32 @@ INSERT INTO payment (discount, tax, surcharge, amount, net_amount, method, statu
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 -- order
-INSERT INTO `order` (user_id, payment_id, status) VALUES
-                                                      (1, 1, 1),  -- User 1, Payment 1, Pending
-                                                      (2, 2, 2),  -- User 2, Payment 2, Processing
-                                                      (3, 3, 3),  -- User 3, Payment 3, Shipped
-                                                      (4, 4, 4),  -- User 4, Payment 4, Completed
-                                                      (5, 5, 1),  -- User 5, Payment 5, Pending
-                                                      (6, 6, 2),  -- User 6, Payment 6, Processing
-                                                      (7, 7, 3),  -- User 7, Payment 7, Shipped
-                                                      (8, 8, 4),  -- User 8, Payment 8, Completed
-                                                      (9, 9, 1),  -- User 9, Payment 9, Pending
-                                                      (10, 10, 2), -- User 10, Payment 10, Processing
-                                                      (1, 11, 3), -- User 1, Payment 11, Shipped
-                                                      (2, 12, 4), -- User 2, Payment 12, Completed
-                                                      (3, 13, 1), -- User 3, Payment 13, Pending
-                                                      (4, 14, 2), -- User 4, Payment 14, Processing
-                                                      (5, 15, 3), -- User 5, Payment 15, Shipped
-                                                      (6, 16, 4), -- User 6, Payment 16, Completed
-                                                      (7, 17, 1), -- User 7, Payment 17, Pending
-                                                      (8, 18, 2), -- User 8, Payment 18, Processing
-                                                      (9, 19, 3), -- User 9, Payment 19, Shipped
-                                                      (10, 20, 4),-- User 10, Payment 20, Completed
-                                                      (3, 21, 2),  -- User 3, Payment 21, Processing (Added one more row)
-                                                      (5, 22, 3), -- User 5, Payment 22, Shipped (Added one more row)
-                                                      (1,23, 4), -- User 1, Payment 23, Completed (Added one more row)
-                                                      (2, 24, 1); -- User 2, payment 24, pending
+-- order
+INSERT INTO `order` (user_id, payment_id, status, type, using_slot, using_time, table_id) VALUES
+                                                                                              (1, 1, 1, 0, NULL, NULL, 1),  -- User 1, Payment 1, Pending, Table 3
+                                                                                              (2, 2, 2, 0, NULL, NULL, 2),  -- User 2, Payment 2, Processing, Table 4
+                                                                                              (3, 3, 3, 0, NULL, NULL, 3),  -- User 3, Payment 3, Shipped, Table 5
+                                                                                              (4, 4, 4, 0, NULL, NULL, 4),  -- User 4, Payment 4, Completed, Table 6
+                                                                                              (5, 5, 1, 0, NULL, NULL, 5),  -- User 5, Payment 5, Pending, Table 7
+                                                                                              (6, 6, 2, 0, '10:00', '10:30', 6),  -- User 6, Payment 6, Processing, Table 8, With using_slot & using_time
+                                                                                              (7, 7, 3, 0, '11:00', '11:30', 7),  -- User 7, Payment 7, Shipped, Table 9, With using_slot & using_time
+                                                                                              (8, 8, 4, 0, '12:00', '12:30', 8),  -- User 8, Payment 8, Completed, Table 10, With using_slot & using_time
+                                                                                              (9, 9, 1, 0, NULL, NULL, 9),  -- User 9, Payment 9, Pending, Table 11
+                                                                                              (10, 10, 2, 0, NULL, NULL, 10), -- User 10, Payment 10, Processing, Table 12
+                                                                                              (1, 11, 3, 0, NULL, NULL, 11), -- User 1, Payment 11, Shipped, Table 13
+                                                                                              (2, 12, 4, 0, NULL, NULL, 12), -- User 2, Payment 12, Completed, Table 14
+                                                                                              (3, 13, 1, 0, NULL, NULL, 1), -- User 3, Payment 13, Pending, No Table
+                                                                                              (4, 14, 2, 0, NULL, NULL, 2), -- User 4, Payment 14, Processing, No Table
+                                                                                              (5, 15, 3, 0, NULL, NULL, NULL), -- User 5, Payment 15, Shipped, No Table
+                                                                                              (6, 16, 4, 0, NULL, NULL, NULL), -- User 6, Payment 16, Completed, No Table
+                                                                                              (7, 17, 1, 0, NULL, NULL, NULL), -- User 7, Payment 17, Pending, No Table
+                                                                                              (8, 18, 2, 0, NULL, NULL, NULL), -- User 8, Payment 18, Processing, No Table
+                                                                                              (9, 19, 3, 0, NULL, NULL, NULL), -- User 9, Payment 19, Shipped, No Table
+                                                                                              (10, 20, 4, 0, NULL, NULL, NULL),-- User 10, Payment 20, Completed, No Table
+                                                                                              (3, 21, 2, 0, NULL, NULL, NULL),  -- User 3, Payment 21, Processing (Added one more row), No Table
+                                                                                              (5, 22, 3, 0, NULL, NULL, NULL), -- User 5, Payment 22, Shipped (Added one more row), No Table
+                                                                                              (1, 23, 4, 0, NULL, NULL, NULL), -- User 1, Payment 23, Completed (Added one more row), No Table
+                                                                                              (2, 24, 1, 0, NULL, NULL, NULL); -- User 2, payment 24, pending, No Table
 
 
 
@@ -398,38 +398,39 @@ INSERT INTO Branch_Order (order_id, branch_id) VALUES
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-INSERT INTO order_item (order_id, item_id,quantity) VALUES
-                                                        (1, 1, 10),  -- Order 1: Margherita Pizza (12.99) and Pasta Carbonara (15.99) = 28.98 + other items = 45.00
-                                                        (1, 2, 2),
-                                                        (1, 5, 3),
-                                                        (2, 3, 2),  -- Order 2: Butter Chicken (16.99) and Biryani (14.99) and other items = 60.00
-                                                        (2, 4, 10),
-                                                        (2, 10, 1),
-                                                        (3, 6, 6),  -- Order 3: California Roll (11.99) and other items = 30.00 ( cancelled )
-                                                        (3, 7, 7),
-                                                        (4, 8, 9),  -- Order 4: Pad Thai (13.99) and other items = 22.50
-                                                        (4, 9, 10),
-                                                        (5, 11, 2),  -- Order 5: Ribeye Steak (29.99) ( pending )
-                                                        (6, 12, 4),  -- Order 6: Grilled Salmon (22.99) and other items = 40.00
-                                                        (6, 1, 3),
-                                                        (7, 5, 2),  -- Order 7: Classic Burger (9.99) and other items = 25.00 ( cancelled )
-                                                        (7, 10, 6),
-                                                        (8, 2, 6),  -- Order 8: Pasta Carbonara (15.99) and other items = 35.00
-                                                        (8, 6, 9),
-                                                        (9, 4, 1),  -- Order 9: Biryani (14.99) and other items = 50.00 ( pending )
-                                                        (9, 3, 8),
-                                                        (9, 8, 1),
-                                                        (10, 9, 2),  -- Order 10: Coq au Vin (24.99) and other items = 27.50
-                                                        (10, 1, 4),
-                                                        (11, 7, 6),  -- Order 11: Tacos (8.99) and other items = 33.00 ( pending )
-                                                        (11, 5, 8),
-                                                        (11, 6, 9),
-                                                        (12, 10, 2),  -- Order 12: Hummus Plate (7.99) and other items = 44.00
-                                                        (12, 2, 1),
-                                                        (12, 8, 2),
-                                                        (13, 11, 5),  -- Order 13: Ribeye Steak (29.99) and other items = 29.99 ( pending )
-                                                        (14, 1, 5),  -- Order 14: Margherita Pizza (12.99) and other items = 15.50
-                                                        (14, 5, 6);
+INSERT INTO item_on_order (item_id, order_id, amount, net_amount, quantity, allow_return, discount, note, status) VALUES
+                                                                                                                      (1, 1, 129.90, 129.90, 10, b'1', 10, 'Order 1: Margherita Pizza', 1),
+                                                                                                                      (2, 1, 31.98, 31.98, 2, b'1', 0, 'Order 1: Pasta Carbonara', 1),
+                                                                                                                      (5, 1, 14.97, 14.97, 3, b'1', 5, 'Order 1: Classic Burger', 1),
+                                                                                                                      (3, 2, 33.98, 33.98, 2, b'1', 10, 'Order 2: Butter Chicken', 1),
+                                                                                                                      (4, 2, 149.90, 149.90, 10, b'1', 15, 'Order 2: Biryani', 1),
+                                                                                                                      (10, 2, 7.99, 7.99, 1, b'0', 0, 'Order 2: Hummus Plate', 1),
+                                                                                                                      (6, 3, 71.94, 0.00, 6, b'1', 0, 'Order 3: California Roll (Cancelled)', 0),
+                                                                                                                      (7, 3, 62.93, 0.00, 7, b'1', 0, 'Order 3: Tacos (Cancelled)', 0),
+                                                                                                                      (8, 4, 125.91, 125.91, 9, b'1', 5, 'Order 4: Pad Thai', 1),
+                                                                                                                      (9, 4, 139.90, 139.90, 10, b'0', 0, 'Order 4: Coq au Vin', 1),
+                                                                                                                      (11, 5, 59.98, 59.98, 2, b'1', 0, 'Order 5: Ribeye Steak (Pending)', 0),
+                                                                                                                      (12, 6, 91.96, 91.96, 4, b'1', 10, 'Order 6: Grilled Salmon', 1),
+                                                                                                                      (1, 6, 38.97, 38.97, 3, b'1', 5, 'Order 6: Margherita Pizza', 1),
+                                                                                                                      (5, 7, 29.98, 0.00, 2, b'1', 0, 'Order 7: Classic Burger (Cancelled)', 0),
+                                                                                                                      (10, 7, 47.94, 0.00, 6, b'1', 0, 'Order 7: Hummus Plate (Cancelled)', 0),
+                                                                                                                      (2, 8, 95.94, 95.94, 6, b'1', 10, 'Order 8: Pasta Carbonara', 1),
+                                                                                                                      (6, 8, 107.91, 107.91, 9, b'1', 5, 'Order 8: California Roll', 1),
+                                                                                                                      (4, 9, 14.99, 14.99, 1, b'1', 15, 'Order 9: Biryani (Pending)', 0),
+                                                                                                                      (3, 9, 135.92, 135.92, 8, b'1', 5, 'Order 9: Butter Chicken', 0),
+                                                                                                                      (8, 9, 13.99, 13.99, 1, b'1', 0, 'Order 9: Pad Thai', 0),
+                                                                                                                      (9, 10, 49.98, 49.98, 2, b'1', 10, 'Order 10: Coq au Vin', 1),
+                                                                                                                      (1, 10, 51.96, 51.96, 4, b'1', 0, 'Order 10: Margherita Pizza', 1),
+                                                                                                                      (7, 11, 53.94, 0.00, 6, b'1', 0, 'Order 11: Tacos (Pending)', 0),
+                                                                                                                      (5, 11, 79.92, 0.00, 8, b'1', 0, 'Order 11: Classic Burger (Pending)', 0),
+                                                                                                                      (6, 11, 107.91, 0.00, 9, b'1', 0, 'Order 11: California Roll (Pending)', 0),
+                                                                                                                      (10, 12, 15.98, 15.98, 2, b'1', 0, 'Order 12: Hummus Plate', 1),
+                                                                                                                      (2, 12, 15.99, 15.99, 1, b'1', 5, 'Order 12: Pasta Carbonara', 1),
+                                                                                                                      (8, 12, 27.98, 27.98, 2, b'1', 0, 'Order 12: Pad Thai', 1),
+                                                                                                                      (11, 13, 149.95, 0.00, 5, b'1', 0, 'Order 13: Ribeye Steak (Pending)', 0),
+                                                                                                                      (1, 14, 64.95, 64.95, 5, b'1', 10, 'Order 14: Margherita Pizza', 1),
+                                                                                                                      (5, 14, 89.94, 89.94, 6, b'1', 5, 'Order 14: Classic Burger', 1);
+
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -471,16 +472,23 @@ FROM `Order`
          JOIN User ON `Order`.user_id = User.id
 WHERE User.email = 'johndoe@example.com';
 
-SELECT Drivers.email, Drivers.phone, Orders.rating
-FROM Drivers
-         JOIN Orders ON Drivers.id = Orders.driver_id
-         JOIN Rating ON Orders.id = Rating.order_id;
+SELECT `order`.id, `order`.status, `order`.`type`,
+       `table`.name  as table_name,`table`.id  as table_id,
+       payment.net_amount
+FROM `order`
+         JOIN order_table joinTable1 ON joinTable1.order_id = `order`.id
+         JOIN `table` ON `table`.id = joinTable1.table_id
+         JOIN payment ON `order`.payment_id = payment.id;
 
+SELECT `order`.id as order_id ,
+       item.name,
+       item_on_children_item.*
+FROM `order`
+         JOIN order_item  ON order_item.order_id = `order`.id
+         JOIN item  on item.id = order_item.item_id
+         JOIN item_on_children_item on item_on_children_item.item_id = item.id
+WHERE `order`.id = 1;
 
-SELECT Menu.name, Menu.price, Payment.status
-FROM Menu
-         JOIN Payment ON Menu.restaurant_id = Payment.restaurant_id
-WHERE Menu.restaurant_id = 1;
 
 
 SELECT Address.street, Address.city, Address.state, Address.pincode
@@ -499,6 +507,8 @@ FROM Menu
 GROUP BY Menu.name
 ORDER BY times_ordered DESC
 LIMIT 10;
+
+select * from area a  where id IN (1,2,3)
 
 
 SELECT Users.first_name, Users.last_name, Users.email, SUM(Orders.total) as total_spent
@@ -532,3 +542,8 @@ WHERE Restaurants.id NOT IN (
              JOIN Users ON Orders.user_id = Users.id
     WHERE Users.email = 'johndoe@example.com'
 );
+
+
+
+
+-- CALL GET_ORDER_BY_CONDITION("SDA");

@@ -1,17 +1,13 @@
 package com.ra.orderapp_java.controller.payment;
 
 import com.ra.orderapp_java.model.dto.GenericResponse;
-import com.ra.orderapp_java.model.dto.payment.ChargeRequestDTO1;
-import com.ra.orderapp_java.model.dto.payment.ProductRequestDTO;
 import com.ra.orderapp_java.model.dto.payment.StripeCheckoutDTO;
 import com.ra.orderapp_java.model.dto.payment.StripeResponse;
 import com.ra.orderapp_java.service.payment.StripeService;
-import com.ra.orderapp_java.util.ProductDAO;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 import com.stripe.model.CustomerSearchResult;
-import com.stripe.model.Product;
 import com.stripe.param.CustomerSearchParams;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -62,23 +58,27 @@ public class CheckoutController {
 
     @PostMapping("/stripe-host-checkout")
     public ResponseEntity<GenericResponse<?>> checkoutProducts(@Valid @RequestBody StripeCheckoutDTO dto) throws StripeException {
+
         StripeResponse stripeResponse = stripeService.checkout(dto);
 
         return new ResponseEntity<>(
             GenericResponse.success(stripeResponse),
             HttpStatus.CREATED
         );
+
     }
 
     @PostMapping("/host-checkout")
     public ResponseEntity<?> integratedCheckout(@RequestBody StripeCheckoutDTO dto) throws StripeException {
+
         String stripeResponse = stripeService.integratedCheckout(dto);
 
         return new ResponseEntity<>(
-                GenericResponse.success(stripeResponse),
-                HttpStatus.CREATED
+            GenericResponse.success(stripeResponse),
+            HttpStatus.CREATED
         );
 
     }
 
 }
+        

@@ -1,5 +1,6 @@
 package com.ra.orderapp_java.controller;
 
+
 import com.ra.orderapp_java.model.dto.GenericResponse;
 import com.ra.orderapp_java.model.dto.PaginationDTO;
 import com.ra.orderapp_java.model.dto.item.ItemQueryDTO;
@@ -24,6 +25,7 @@ public class ItemController {
 
     @GetMapping
     public ResponseEntity<GenericResponse<PaginationDTO<ItemResponseDTO>>> index(@ModelAttribute ItemQueryDTO dto){
+
         return new ResponseEntity<>(
             GenericResponse.success(
                 itemService.findAll(dto)

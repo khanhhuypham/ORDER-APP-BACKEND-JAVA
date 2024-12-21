@@ -5,8 +5,6 @@ import com.ra.orderapp_java.model.entity.Payment;
 import com.ra.orderapp_java.model.entity.TableEntity;
 import lombok.*;
 
-
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

@@ -1,6 +1,7 @@
 package com.ra.orderapp_java.service.item;
 
 
+import com.ra.orderapp_java.model.constant.CATEGORY_TYPE;
 import com.ra.orderapp_java.model.dto.PaginationDTO;
 import com.ra.orderapp_java.model.dto.childrenItem.ChildrenItemResponseDTO;
 import com.ra.orderapp_java.model.dto.item.ItemQueryDTO;
@@ -38,7 +39,9 @@ public class ItemServiceImp implements ItemService {
         Pageable pageable  = PageRequest.of(dto.getPage() - 1, dto.getLimit());
 
         Page<Item> result = itemRepo.findAllByCondition(
-            dto.getCategory_id() <= 0 ? 0L : dto.getCategory_id(),
+            CATEGORY_TYPE.fromValue(dto.getCategory_type()),
+            dto.getCategory_id(),
+            dto.getOut_of_stock(),
             dto.getSearch_key(),
             pageable
         );
@@ -52,18 +55,6 @@ public class ItemServiceImp implements ItemService {
     }
 
 
-//    @Override
-//    public Page<ItemResponseDTO> pagination(Pageable pageable, String search_key){
-//        List<ItemResponseDTO> list = new ArrayList();
-//
-//        for(Item item : itemRepo.findAll(pageable)) {
-//            // Fetch all ChildrenItems in a single query
-//            List<ChildrenItem> childrenItemList = childrenItemRepo.findByParentId(item.getId());
-//            list.add(new ItemResponseDTO(item,childrenItemList));
-//        }
-//
-//        return null;
-//    }
 
 
     @Override
@@ -108,7 +99,6 @@ public class ItemServiceImp implements ItemService {
 
         return new ItemResponseDTO(savedItem,childrenItemList);
     }
-
 
 
 

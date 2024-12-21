@@ -12,7 +12,6 @@ import java.util.List;
 @Setter
 @Builder
 public class ItemRequestDTO {
-
     private String name;
     private Double price;
     private String image;
@@ -22,5 +21,4 @@ public class ItemRequestDTO {
     private Long unit_id;
     private Long printer_id;
     List<ChildrenItemResponseDTO> children;
-
 }

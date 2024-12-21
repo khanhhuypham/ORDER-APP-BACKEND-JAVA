@@ -18,5 +18,13 @@ public enum ORDER_STATUS {
         return value;
     }
 
-
+    // Utility method to convert from integer to ORDER_STATUS
+    public static ORDER_STATUS fromValue(int value) {
+        for (ORDER_STATUS status : values()) {
+            if (status.value == value) {
+                return status;
+            }
+        }
+        throw new IllegalArgumentException("Invalid status value: " + value);
+    }
 }

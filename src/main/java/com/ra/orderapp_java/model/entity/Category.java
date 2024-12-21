@@ -28,7 +28,7 @@ public class Category {
 
     @Column(name="type",columnDefinition = "integer default 1")
     @Enumerated(EnumType.ORDINAL)
-    private CATEGORY_TYPE type = CATEGORY_TYPE.PROCESSED;
+    private CATEGORY_TYPE type = CATEGORY_TYPE.FOOD;
 
     @Column(name="description")
     private String description;

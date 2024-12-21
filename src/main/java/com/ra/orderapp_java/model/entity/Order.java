@@ -1,10 +1,10 @@
 package com.ra.orderapp_java.model.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ra.orderapp_java.model.constant.ORDER_STATUS;
 import com.ra.orderapp_java.model.constant.ORDER_TYPE;
-import com.ra.orderapp_java.model.entity.JoinEntity.OrderOnItem;
-import com.ra.orderapp_java.model.entity.JoinEntity.OrderOnTable;
+import com.ra.orderapp_java.model.entity.JoinEntity.ItemOnOrder;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,6 +17,11 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "`order`")
+//@NamedStoredProcedureQuery(name = "`order`.plus1", procedureName = "GET_ORDER_BY_CONDITION",
+//parameters = {
+//    @StoredProcedureParameter(mode = ParameterMode.IN, name = "search_key", type = String.class),
+//    @StoredProcedureParameter(mode = ParameterMode.OUT, name = "res", type = Order.class)
+//})
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +30,6 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id",referencedColumnName = "id", nullable=false)
     private User user;
-
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "payment_id", referencedColumnName = "id", unique = true,nullable=false)
@@ -43,13 +47,16 @@ public class Order {
     @Column(name="using_time")
     private String using_time;
 
-    @Column(name="using_slot")
-    private String using_slot;
+    @Column(name="using_slot", nullable = true)
+    private Integer using_slot;
+
+
+    @ManyToOne
+    @JoinColumn(name="table_id",referencedColumnName = "id",nullable = true)
+    @JsonIgnore
+    private TableEntity table;
 
     @OneToMany(mappedBy = "order")
-    Set<OrderOnTable> tables;
-
-    @OneToMany(mappedBy = "order")
-    Set<OrderOnItem> items;
+    Set<ItemOnOrder> items;
 }
 

@@ -3,8 +3,6 @@ package com.ra.orderapp_java.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ra.orderapp_java.model.constant.TABLE_STATUS;
-import com.ra.orderapp_java.model.entity.JoinEntity.OrderOnItem;
-import com.ra.orderapp_java.model.entity.JoinEntity.OrderOnTable;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -40,11 +38,12 @@ public class TableEntity {
     @JsonIgnore
     private Area area;
 
-    @OneToMany(mappedBy = "table")
+//    @OneToMany(mappedBy = "table")
+//    @JsonIgnore
+//    Set<OrderOnTable> orders;
+
+    @OneToMany(mappedBy = "table", cascade = CascadeType.ALL)
     @JsonIgnore
-    Set<OrderOnTable> orders;
-
-
-
+    private Set<Order> orders;
 
 }

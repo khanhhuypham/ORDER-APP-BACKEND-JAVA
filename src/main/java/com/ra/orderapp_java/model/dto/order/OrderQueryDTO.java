@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,12 +17,16 @@ import lombok.Setter;
 @Setter
 public class OrderQueryDTO {
     private String search_key;
-    private ORDER_STATUS status;
+
+    private List<Integer> status;
+
     @Min(value = 0,message = "user_id invalid")
     private Long user_id;
+
     private ORDER_TYPE type;
 
     private Integer limit;
+
     @Min(value = 1,message = "page must be greater than 1")
     private Integer page;
 }
