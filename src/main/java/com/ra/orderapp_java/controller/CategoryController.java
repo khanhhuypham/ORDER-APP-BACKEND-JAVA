@@ -1,6 +1,7 @@
 package com.ra.orderapp_java.controller;
 
 
+import com.ra.orderapp_java.model.constant.CATEGORY_TYPE;
 import com.ra.orderapp_java.model.dto.GenericResponse;
 import com.ra.orderapp_java.model.dto.category.CategoryRequestDTO;
 import com.ra.orderapp_java.model.dto.category.CategoryResponseDTO;
@@ -26,9 +27,17 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<GenericResponse<List<CategoryResponseDTO>>> index(@RequestParam(defaultValue = "-1",name = "status") int status){
+    public ResponseEntity<GenericResponse<List<CategoryResponseDTO>>> index(
+        @RequestParam(name = "active",required = false) Boolean active,
+        @RequestParam(name = "type",required = false) Integer type
+    ){
+        CATEGORY_TYPE category = null;
+        if (type != null){
+            category = CATEGORY_TYPE.fromValue(type);
+        }
+
         return new ResponseEntity<>(
-            GenericResponse.success(categoryService.findAll(status)),
+            GenericResponse.success(categoryService.findAll(active,category)),
             HttpStatus.OK
         );
     }

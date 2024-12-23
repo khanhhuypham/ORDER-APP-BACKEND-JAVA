@@ -37,9 +37,14 @@ public class ItemServiceImp implements ItemService {
 
         List<ItemResponseDTO> list = new ArrayList();
         Pageable pageable  = PageRequest.of(dto.getPage() - 1, dto.getLimit());
+        CATEGORY_TYPE type = null;
+
+        if (dto.getCategory_type() != null){
+            type = CATEGORY_TYPE.fromValue(dto.getCategory_type());
+        }
 
         Page<Item> result = itemRepo.findAllByCondition(
-            CATEGORY_TYPE.fromValue(dto.getCategory_type()),
+            type,
             dto.getCategory_id(),
             dto.getOut_of_stock(),
             dto.getSearch_key(),

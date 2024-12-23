@@ -1,6 +1,7 @@
 package com.ra.orderapp_java.service.category;
 
 
+import com.ra.orderapp_java.model.constant.CATEGORY_TYPE;
 import com.ra.orderapp_java.model.dto.category.CategoryRequestDTO;
 import com.ra.orderapp_java.model.dto.category.CategoryResponseDTO;
 import com.ra.orderapp_java.model.entity.Category;
@@ -20,22 +21,12 @@ public class CategoryServiceImp implements CategoryService{
     private final CategoryRepository categoryRepo;
 
     @Override
-    public List<CategoryResponseDTO> findAll(Integer status) {
+    public List<CategoryResponseDTO> findAll(Boolean active, CATEGORY_TYPE type){
         List<CategoryResponseDTO> list = new ArrayList<>();
 
-        for (Category category: categoryRepo.findAll()) {
+        for (Category category: categoryRepo.findAllByCondition(active,type)) {
             list.add(new CategoryResponseDTO(category));
         }
-//        if (status < 0){
-//            for (Category category: categoryRepo.findAll()) {
-//                list.add(new CategoryResponseDTO(category));
-//            }
-//        }else{
-//            for (Category category: categoryRepo.findActiveCategory(status)) {
-//                list.add(new CategoryResponseDTO(category));
-//            }
-//        }
-
         return list;
     }
 

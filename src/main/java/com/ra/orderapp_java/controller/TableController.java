@@ -25,9 +25,12 @@ public class TableController {
     }
 
     @GetMapping
-    public ResponseEntity<GenericResponse<List<TableResponseDTO>>> index(@RequestParam(defaultValue = "-1",name = "area_id") Long area_id){
+    public ResponseEntity<GenericResponse<List<TableResponseDTO>>> index(
+        @RequestParam(name = "area_id",required = false) Long area_id,
+        @RequestParam(name = "active",required = false) Boolean active
+    ){
         return new ResponseEntity<>(
-            GenericResponse.success(tableService.findAll(area_id)),
+            GenericResponse.success(tableService.findAll(area_id,active)),
             HttpStatus.OK
         );
     }

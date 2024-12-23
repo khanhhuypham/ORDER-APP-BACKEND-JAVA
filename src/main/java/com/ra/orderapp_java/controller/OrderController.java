@@ -70,5 +70,14 @@ public class OrderController {
     }
 
 
+    @PutMapping("/{id}")
+    public ResponseEntity<GenericResponse<?>> addItems(@PathVariable Long id, @RequestBody OrderRequestDTO dto){
+        return new ResponseEntity<>(
+                GenericResponse.success(orderService.saveItemToOrder(id,null)),
+                HttpStatus.CREATED
+        );
+    }
+
+
 
 }

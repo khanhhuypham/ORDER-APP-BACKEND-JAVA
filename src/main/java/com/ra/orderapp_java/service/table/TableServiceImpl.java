@@ -1,10 +1,12 @@
 package com.ra.orderapp_java.service.table;
 
 
+import com.ra.orderapp_java.model.constant.ORDER_STATUS;
 import com.ra.orderapp_java.model.dto.table.BatchCreateTableDto;
 import com.ra.orderapp_java.model.dto.table.TableRequestDTO;
 import com.ra.orderapp_java.model.dto.table.TableResponseDTO;
 import com.ra.orderapp_java.model.entity.Area;
+import com.ra.orderapp_java.model.entity.Order;
 import com.ra.orderapp_java.model.entity.TableEntity;
 import com.ra.orderapp_java.repository.AreaRepository;
 import com.ra.orderapp_java.repository.TableRepository;
@@ -26,17 +28,11 @@ public class TableServiceImpl implements TableService{
 
 
     @Override
-    public List<TableResponseDTO> findAll(Long areaId) {
+    public List<TableResponseDTO> findAll(Long areaId,Boolean active) {
         List<TableResponseDTO> list = new ArrayList();
 
-        if (areaId == -1){
-            for(TableEntity table : tableRepo.findAll()) {
-                list.add(new TableResponseDTO(table));
-            }
-        }else{
-            for(TableEntity table : tableRepo.findAllByAreaId(areaId)) {
-                list.add(new TableResponseDTO(table));
-            }
+        for(TableEntity table : tableRepo.findAllByCondition(areaId,active)) {
+            list.add(new TableResponseDTO(table));
         }
 
         return list;
@@ -91,7 +87,7 @@ public class TableServiceImpl implements TableService{
         List<TableEntity> savedEntities = tableRepo.saveAll(entities);
 
         return savedEntities.stream()
-            .map(TableResponseDTO::new)
+            .map(table -> new TableResponseDTO(table))
             .collect(Collectors.toList());
 
     }
@@ -100,6 +96,7 @@ public class TableServiceImpl implements TableService{
     @Override
     public TableResponseDTO findById(Long id) {
         TableEntity table = tableRepo.findById(id).orElse(null);
+
         return table == null ? null : new TableResponseDTO(table);
     }
 

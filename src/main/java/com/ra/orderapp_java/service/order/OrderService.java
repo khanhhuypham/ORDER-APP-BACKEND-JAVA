@@ -1,5 +1,6 @@
 package com.ra.orderapp_java.service.order;
 
+import com.ra.orderapp_java.model.dto.ItemOnOrder.ItemOnOrderRequestDTO;
 import com.ra.orderapp_java.model.dto.PaginationDTO;
 import com.ra.orderapp_java.model.dto.childrenItem.ChildrenItemResponseDTO;
 import com.ra.orderapp_java.model.dto.item.ItemQueryDTO;
@@ -15,7 +16,7 @@ import java.util.List;
 public interface OrderService {
     PaginationDTO<OrderResponseDTO> findAll(OrderQueryDTO dto);
     OrderResponseDTO create(Long id, OrderRequestDTO dto);
-    void saveItemToOrder(Long id, List<Item> itemList);
+    void saveItemToOrder(Long id, List<ItemOnOrderRequestDTO> dtoList);
     void cancelItemOfOrder(Long id, List<Item> itemList);
     OrderResponseDTO findById(Long id);
     void delete(Long id);

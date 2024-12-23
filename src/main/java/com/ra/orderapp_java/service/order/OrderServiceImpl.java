@@ -1,6 +1,7 @@
 package com.ra.orderapp_java.service.order;
 
 import com.ra.orderapp_java.model.constant.ORDER_STATUS;
+import com.ra.orderapp_java.model.dto.ItemOnOrder.ItemOnOrderRequestDTO;
 import com.ra.orderapp_java.model.dto.PaginationDTO;
 import com.ra.orderapp_java.model.dto.childrenItem.ChildrenItemResponseDTO;
 import com.ra.orderapp_java.model.dto.item.ItemResponseDTO;
@@ -22,9 +23,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.Set;
-import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toSet;
+
 @Transactional
 @Service
 @RequiredArgsConstructor
@@ -72,28 +73,30 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public void saveItemToOrder(Long id, List<Item> itemList) {
+    public void saveItemToOrder(Long id, List<ItemOnOrderRequestDTO> dtoList) {
         Order order = orderRepo.findById(id).orElse(null);
 
         if (order != null) {
             // Precompute IDs of items already in the order for quick lookup
             Set<Long> existingItemIds = order.getItems().stream()
-                    .map(orderOnItem -> orderOnItem.getItem().getId())
-                    .collect(Collectors.toSet());
+                    .map(item -> item.getItem().getId())
+                    .collect(toSet());
 
-            for (Item item : itemList) {
-                if (existingItemIds.contains(item.getId())) {
-                    // Item is already in the order
-                    ItemOnOrder itemOnOrder = orderOnItemRepo.findByItemId(item.getId());
-                    if (itemOnOrder != null) {
-                        itemOnOrder.setQuantity(2F); // Update the quantity
-                        orderOnItemRepo.save(itemOnOrder); // Persist the update
-                    }
-                } else {
-                    // Item is not in the order, create a new OrderOnItem
-                    ItemOnOrder newItemOnOrder = new ItemOnOrder(order, item); // Assuming constructor accepts Order and Item
-                    orderOnItemRepo.save(newItemOnOrder);
-                }
+            for (ItemOnOrderRequestDTO item : dtoList) {
+//                Ite order = itemService.findById(item.getId()).orElse(null);
+
+//                if (existingItemIds.contains(item.getId())) {
+//                    // Item is already in the order
+//                    ItemOnOrder itemOnOrder = orderOnItemRepo.findByItemId(item.getId());
+//                    if (itemOnOrder != null) {
+//                        itemOnOrder.setQuantity(item.getQuantity()); // Update the quantity
+//                        orderOnItemRepo.save(itemOnOrder); // Persist the update
+//                    }
+//                } else {
+//                    // Item is not in the order, create a new OrderOnItem
+//                    ItemOnOrder newItemOnOrder = new ItemOnOrder(order, item); // Assuming constructor accepts Order and Item
+//                    orderOnItemRepo.save(newItemOnOrder);
+//                }
             }
         }
 
@@ -106,7 +109,7 @@ public class OrderServiceImpl implements OrderService{
             // Precompute IDs of items already in the order for quick lookup
             Set<Long> existingItemIds = order.getItems().stream()
                     .map(orderOnItem -> orderOnItem.getItem().getId())
-                    .collect(Collectors.toSet());
+                    .collect(toSet());
 
             for (Item item : itemList) {
                 if (existingItemIds.contains(item.getId())) {

@@ -38,12 +38,8 @@ public class TableEntity {
     @JsonIgnore
     private Area area;
 
-//    @OneToMany(mappedBy = "table")
-//    @JsonIgnore
-//    Set<OrderOnTable> orders;
 
     @OneToMany(mappedBy = "table", cascade = CascadeType.ALL)
-    @JsonIgnore
     private Set<Order> orders;
 
 }

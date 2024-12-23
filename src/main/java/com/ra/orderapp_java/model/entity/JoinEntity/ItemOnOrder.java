@@ -1,6 +1,7 @@
 package com.ra.orderapp_java.model.entity.JoinEntity;
 
 import com.ra.orderapp_java.model.constant.ITEM_ON_ORDER_STATUS;
+import com.ra.orderapp_java.model.dto.ItemOnOrder.ItemOnOrderRequestDTO;
 import com.ra.orderapp_java.model.entity.Item;
 import com.ra.orderapp_java.model.entity.Order;
 import jakarta.persistence.*;
@@ -69,12 +70,26 @@ public class ItemOnOrder {
         // Create ItemOnChildrenItemKey
         ItemOnOrderKey id = new ItemOnOrderKey();
         id.setItemId(item.getId());
-        id.setOrderId(item.getId());
+        id.setOrderId(order.getId());
         this.id = id;
         this.order = order;
         this.item = item;
         this.quantity = 1.0f;
         this.amount =  9.5;
+        this.net_amount = 9.5;
+    }
+
+    public ItemOnOrder(Order order,Item item, ItemOnOrderRequestDTO dto) {
+        // Create ItemOnChildrenItemKey
+        ItemOnOrderKey id = new ItemOnOrderKey();
+        id.setItemId(item.getId());
+        id.setOrderId(order.getId());
+        this.id = id;
+        this.order = order;
+        this.item = item;
+        this.quantity = dto.getQuantity();
+//        this.amount =  dto.get
+        this.note = dto.getNote();
         this.net_amount = 9.5;
 
     }
