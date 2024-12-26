@@ -2,8 +2,10 @@ package com.ra.orderapp_java.model.dto.item;
 
 
 import com.fasterxml.jackson.annotation.*;
+import com.ra.orderapp_java.model.constant.CATEGORY_TYPE;
 import com.ra.orderapp_java.model.dto.childrenItem.ChildrenItemResponseDTO;
 import com.ra.orderapp_java.model.entity.*;
+import com.ra.orderapp_java.model.entity.JoinEntity.ItemOnChildrenItem;
 import com.ra.orderapp_java.model.entity.JoinEntity.ItemOnOrder;
 import lombok.*;
 
@@ -27,12 +29,14 @@ public class ItemResponseDTO {
     private String description;
     private Long category_id;
     private String category_name;
+    private Integer category_type;
     private String unit_type;
     private Long unit_id;
     private Long printer_id;
     List<ChildrenItemResponseDTO> children;
 
     public ItemResponseDTO(Item item, List<ChildrenItem> list) {
+
         this.id = item.getId();
         this.name = item.getName();
         this.price = item.getPrice();
@@ -41,11 +45,31 @@ public class ItemResponseDTO {
         this.sell_by_weight = item.getSell_by_weight();
         this.description = item.getDescription();
         this.printer_id = item.getPrinter().getId();
-        this.category_id = item.getCategory().getId();
-        this.category_name = item.getCategory().getName();
+        if (item.getCategory() != null){
+            this.category_id = item.getCategory().getId();
+            this.category_name = item.getCategory().getName();
+        }
+        this.category_type = item.getCategory_type().getValue();
         this.unit_type = item.getUnit().getName();
         this.unit_id = item.getUnit().getId();
-        this.children = list.stream().map(ChildrenItemResponseDTO::new).collect(Collectors.toList());
+
+        this.children = list.stream().map(child -> {
+
+            ItemOnChildrenItem matching = Optional.ofNullable(item.getChildren())
+                    .stream()
+                    .flatMap(Collection::stream)
+                    .filter(a -> Objects.equals(a.getChildrenItem().getId(), child.getId()))
+                    .findFirst()
+                    .orElse(null);
+
+            if (matching != null){
+                return new ChildrenItemResponseDTO(child,matching.getQuantity());
+            }else{
+                return new ChildrenItemResponseDTO(child);
+            }
+
+
+        }).collect(Collectors.toList());
 
         this.additionalProperties = new HashMap<>();
         this.excludedProperties = new HashSet<>();
@@ -87,6 +111,7 @@ public class ItemResponseDTO {
         if (!excludedProperties.contains("description")) allProperties.put("description", description);
         if (!excludedProperties.contains("category_id")) allProperties.put("category_id", category_id);
         if (!excludedProperties.contains("category_name")) allProperties.put("category_name", category_name);
+        if (!excludedProperties.contains("category_type")) allProperties.put("category_type", category_type);
         if (!excludedProperties.contains("unit_type")) allProperties.put("unit_type", unit_type);
         if (!excludedProperties.contains("unit_id")) allProperties.put("unit_id", unit_id);
         if (!excludedProperties.contains("printer_id")) allProperties.put("printer_id", printer_id);

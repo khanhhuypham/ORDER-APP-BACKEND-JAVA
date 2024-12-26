@@ -9,7 +9,6 @@ public enum ORDER_TYPE {
     CATERING(4),
     FOOD_COURT(5); // YÊU CẦU THANH TOÁN
 
-
     private final int value;
 
     private ORDER_TYPE(int value) {

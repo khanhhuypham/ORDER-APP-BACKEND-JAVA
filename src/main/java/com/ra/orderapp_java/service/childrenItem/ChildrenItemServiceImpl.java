@@ -4,6 +4,7 @@ import com.ra.orderapp_java.model.dto.childrenItem.ChildrenItemRequestDTO;
 import com.ra.orderapp_java.model.dto.childrenItem.ChildrenItemResponseDTO;
 import com.ra.orderapp_java.model.entity.Category;
 import com.ra.orderapp_java.model.entity.ChildrenItem;
+import com.ra.orderapp_java.model.entity.JoinEntity.ItemOnChildrenItem;
 import com.ra.orderapp_java.model.entity.Unit;
 import com.ra.orderapp_java.repository.CategoryRepository;
 import com.ra.orderapp_java.repository.ChildrenItemRepository;
@@ -11,9 +12,9 @@ import com.ra.orderapp_java.repository.UnitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +36,6 @@ public class ChildrenItemServiceImpl implements ChildrenItemService{
 
     @Override
     public ChildrenItemResponseDTO create(Long id,ChildrenItemRequestDTO dto) {
-
 
         Unit unit = unitRepo.findById(dto.getUnit_id()).orElse(null);
         Category category = categoryRepo.findById(dto.getCategory_id()).orElse(null);

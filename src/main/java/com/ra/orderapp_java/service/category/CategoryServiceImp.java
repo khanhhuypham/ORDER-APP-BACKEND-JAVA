@@ -7,8 +7,6 @@ import com.ra.orderapp_java.model.dto.category.CategoryResponseDTO;
 import com.ra.orderapp_java.model.entity.Category;
 import com.ra.orderapp_java.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

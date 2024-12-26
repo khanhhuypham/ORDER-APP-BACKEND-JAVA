@@ -1,7 +1,5 @@
 package com.ra.orderapp_java.model.dto.childrenItem;
 
-import com.ra.orderapp_java.model.entity.Category;
-import com.ra.orderapp_java.model.entity.Unit;
 import lombok.*;
 
 @AllArgsConstructor

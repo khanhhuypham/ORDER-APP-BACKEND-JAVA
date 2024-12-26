@@ -110,18 +110,19 @@ INSERT INTO category (name,active,type) VALUES
                                             ('Italian',1,1),
                                             ('Indian',1,1),
                                             ('American',1,1),
-                                            ('Japanese',1,2),
-                                            ('Mexican',1,0),
-                                            ('Thai',1,2),
+                                            ('Japanese',1,1),
+                                            ('Mexican',1,1),
+                                            ('Thai',1,1),
                                             ('French',1,1),
                                             ('Greek',1,1),
-                                            ('Chinese',1,2),
-                                            ('Mediterranean',1,2),
+                                            ('Chinese',1,1),
                                             ('Steakhouse',1,1),
-                                            ('Seafood',1,2),
-                                            ('Pizza',1,2),
-                                            ('Desserts',1,2),
-                                            ('Beverages',1,1);
+                                            ('Beer',1,2),
+                                            ('CookTail',1,2),
+                                            ('Wine',1,2),
+                                            ('Soft-Drink',1,2),
+                                            ('Cafe',1,2),
+                                            ('Karaoke',1,6);
 
 -- Insert Units
 INSERT INTO unit (name) VALUES
@@ -317,16 +318,15 @@ INSERT INTO payment (discount, tax, surcharge, amount, net_amount, method, statu
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 -- order
--- order
 INSERT INTO `order` (user_id, payment_id, status, type, using_slot, using_time, table_id) VALUES
                                                                                               (1, 1, 1, 0, NULL, NULL, 1),  -- User 1, Payment 1, Pending, Table 3
                                                                                               (2, 2, 2, 0, NULL, NULL, 2),  -- User 2, Payment 2, Processing, Table 4
                                                                                               (3, 3, 3, 0, NULL, NULL, 3),  -- User 3, Payment 3, Shipped, Table 5
                                                                                               (4, 4, 4, 0, NULL, NULL, 4),  -- User 4, Payment 4, Completed, Table 6
                                                                                               (5, 5, 1, 0, NULL, NULL, 5),  -- User 5, Payment 5, Pending, Table 7
-                                                                                              (6, 6, 2, 0, '10:00', '10:30', 6),  -- User 6, Payment 6, Processing, Table 8, With using_slot & using_time
-                                                                                              (7, 7, 3, 0, '11:00', '11:30', 7),  -- User 7, Payment 7, Shipped, Table 9, With using_slot & using_time
-                                                                                              (8, 8, 4, 0, '12:00', '12:30', 8),  -- User 8, Payment 8, Completed, Table 10, With using_slot & using_time
+                                                                                              (6, 6, 2, 0, 1, '10:30', 6),  -- User 6, Payment 6, Processing, Table 8, With using_slot & using_time
+                                                                                              (7, 7, 3, 0, 2, '11:30', 7),  -- User 7, Payment 7, Shipped, Table 9, With using_slot & using_time
+                                                                                              (8, 8, 4, 0, 3, '12:30', 8),  -- User 8, Payment 8, Completed, Table 10, With using_slot & using_time
                                                                                               (9, 9, 1, 0, NULL, NULL, 9),  -- User 9, Payment 9, Pending, Table 11
                                                                                               (10, 10, 2, 0, NULL, NULL, 10), -- User 10, Payment 10, Processing, Table 12
                                                                                               (1, 11, 3, 0, NULL, NULL, 11), -- User 1, Payment 11, Shipped, Table 13
@@ -398,43 +398,61 @@ INSERT INTO Branch_Order (order_id, branch_id) VALUES
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-INSERT INTO item_on_order (item_id, order_id, amount, net_amount, quantity, allow_return, discount, note, status) VALUES
-                                                                                                                      (1, 1, 129.90, 129.90, 10, b'1', 10, 'Order 1: Margherita Pizza', 1),
-                                                                                                                      (2, 1, 31.98, 31.98, 2, b'1', 0, 'Order 1: Pasta Carbonara', 1),
-                                                                                                                      (5, 1, 14.97, 14.97, 3, b'1', 5, 'Order 1: Classic Burger', 1),
-                                                                                                                      (3, 2, 33.98, 33.98, 2, b'1', 10, 'Order 2: Butter Chicken', 1),
-                                                                                                                      (4, 2, 149.90, 149.90, 10, b'1', 15, 'Order 2: Biryani', 1),
-                                                                                                                      (10, 2, 7.99, 7.99, 1, b'0', 0, 'Order 2: Hummus Plate', 1),
-                                                                                                                      (6, 3, 71.94, 0.00, 6, b'1', 0, 'Order 3: California Roll (Cancelled)', 0),
-                                                                                                                      (7, 3, 62.93, 0.00, 7, b'1', 0, 'Order 3: Tacos (Cancelled)', 0),
-                                                                                                                      (8, 4, 125.91, 125.91, 9, b'1', 5, 'Order 4: Pad Thai', 1),
-                                                                                                                      (9, 4, 139.90, 139.90, 10, b'0', 0, 'Order 4: Coq au Vin', 1),
-                                                                                                                      (11, 5, 59.98, 59.98, 2, b'1', 0, 'Order 5: Ribeye Steak (Pending)', 0),
-                                                                                                                      (12, 6, 91.96, 91.96, 4, b'1', 10, 'Order 6: Grilled Salmon', 1),
-                                                                                                                      (1, 6, 38.97, 38.97, 3, b'1', 5, 'Order 6: Margherita Pizza', 1),
-                                                                                                                      (5, 7, 29.98, 0.00, 2, b'1', 0, 'Order 7: Classic Burger (Cancelled)', 0),
-                                                                                                                      (10, 7, 47.94, 0.00, 6, b'1', 0, 'Order 7: Hummus Plate (Cancelled)', 0),
-                                                                                                                      (2, 8, 95.94, 95.94, 6, b'1', 10, 'Order 8: Pasta Carbonara', 1),
-                                                                                                                      (6, 8, 107.91, 107.91, 9, b'1', 5, 'Order 8: California Roll', 1),
-                                                                                                                      (4, 9, 14.99, 14.99, 1, b'1', 15, 'Order 9: Biryani (Pending)', 0),
-                                                                                                                      (3, 9, 135.92, 135.92, 8, b'1', 5, 'Order 9: Butter Chicken', 0),
-                                                                                                                      (8, 9, 13.99, 13.99, 1, b'1', 0, 'Order 9: Pad Thai', 0),
-                                                                                                                      (9, 10, 49.98, 49.98, 2, b'1', 10, 'Order 10: Coq au Vin', 1),
-                                                                                                                      (1, 10, 51.96, 51.96, 4, b'1', 0, 'Order 10: Margherita Pizza', 1),
-                                                                                                                      (7, 11, 53.94, 0.00, 6, b'1', 0, 'Order 11: Tacos (Pending)', 0),
-                                                                                                                      (5, 11, 79.92, 0.00, 8, b'1', 0, 'Order 11: Classic Burger (Pending)', 0),
-                                                                                                                      (6, 11, 107.91, 0.00, 9, b'1', 0, 'Order 11: California Roll (Pending)', 0),
-                                                                                                                      (10, 12, 15.98, 15.98, 2, b'1', 0, 'Order 12: Hummus Plate', 1),
-                                                                                                                      (2, 12, 15.99, 15.99, 1, b'1', 5, 'Order 12: Pasta Carbonara', 1),
-                                                                                                                      (8, 12, 27.98, 27.98, 2, b'1', 0, 'Order 12: Pad Thai', 1),
-                                                                                                                      (11, 13, 149.95, 0.00, 5, b'1', 0, 'Order 13: Ribeye Steak (Pending)', 0),
-                                                                                                                      (1, 14, 64.95, 64.95, 5, b'1', 10, 'Order 14: Margherita Pizza', 1),
-                                                                                                                      (5, 14, 89.94, 89.94, 6, b'1', 5, 'Order 14: Classic Burger', 1);
-
+INSERT INTO item_on_order (
+    item_id,
+    order_id,
+    allow_return,
+    discount_amount,
+    discount_percent,
+    note,
+    quantity,
+    status
+) VALUES
+      (1, 1, b'1', NULL, 10, 'Order 1: Margherita Pizza', 10.0, 1),
+      (2, 1, b'1', NULL, 0, 'Order 1: Pasta Carbonara', 2.0, 1),
+      (5, 1, b'1', NULL, 5, 'Order 1: Classic Burger', 3.0, 1),
+      (3, 2, b'1', NULL, 10, 'Order 2: Butter Chicken', 2.0, 1),
+      (4, 2, b'1', NULL, 15, 'Order 2: Biryani', 10.0, 1),
+      (10, 2, b'0', NULL, 0, 'Order 2: Hummus Plate', 1.0, 1),
+      (6, 3, b'1', NULL, 0, 'Order 3: California Roll (Cancelled)', 6.0, 0),
+      (7, 3, b'1', NULL, 0, 'Order 3: Tacos (Cancelled)', 7.0, 0),
+      (8, 4, b'1', NULL, 5, 'Order 4: Pad Thai', 9.0, 1),
+      (9, 4, b'0', NULL, 0, 'Order 4: Coq au Vin', 10.0, 1),
+      (11, 5, b'1', NULL, 0, 'Order 5: Ribeye Steak (Pending)', 2.0, 0),
+      (12, 6, b'1', NULL, 10, 'Order 6: Grilled Salmon', 4.0, 1),
+      (1, 6, b'1', NULL, 5, 'Order 6: Margherita Pizza', 3.0, 1),
+      (5, 7, b'1', NULL, 0, 'Order 7: Classic Burger (Cancelled)', 2.0, 0),
+      (10, 7, b'1', NULL, 0, 'Order 7: Hummus Plate (Cancelled)', 6.0, 0),
+      (2, 8, b'1', NULL, 10, 'Order 8: Pasta Carbonara', 6.0, 1),
+      (6, 8, b'1', NULL, 5, 'Order 8: California Roll', 9.0, 1),
+      (4, 9, b'1', NULL, 15, 'Order 9: Biryani (Pending)', 1.0, 0),
+      (3, 9, b'1', NULL, 5, 'Order 9: Butter Chicken', 8.0, 0),
+      (8, 9, b'1', NULL, 0, 'Order 9: Pad Thai', 1.0, 0),
+      (9, 10, b'1', NULL, 10, 'Order 10: Coq au Vin', 2.0, 1),
+      (1, 10, b'1', NULL, 0, 'Order 10: Margherita Pizza', 4.0, 1),
+      (7, 11, b'1', NULL, 0, 'Order 11: Tacos (Pending)', 6.0, 0),
+      (5, 11, b'1', NULL, 0, 'Order 11: Classic Burger (Pending)', 8.0, 0),
+      (6, 11, b'1', NULL, 0, 'Order 11: California Roll (Pending)', 9.0, 0),
+      (10, 12, b'1', NULL, 0, 'Order 12: Hummus Plate', 2.0, 1),
+      (2, 12, b'1', NULL, 5, 'Order 12: Pasta Carbonara', 1.0, 1),
+      (8, 12, b'1', NULL, 0, 'Order 12: Pad Thai', 2.0, 1),
+      (11, 13, b'1', NULL, 0, 'Order 13: Ribeye Steak (Pending)', 5.0, 0),
+      (1, 14, b'1', NULL, 10, 'Order 14: Margherita Pizza', 5.0, 1),
+      (5, 14, b'1', NULL, 5, 'Order 14: Classic Burger', 6.0, 1);
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////
-
+INSERT INTO note (active, content) VALUES
+                                       (b'1', 'This is the first note.'),
+                                       (b'0', 'This note is inactive.'),
+                                       (b'1', 'Remember to check the email.'),
+                                       (b'1', 'Prepare the report by Friday.'),
+                                       (b'0', 'Draft needs further revisions.'),
+                                       (b'1', 'Meeting scheduled at 3 PM.'),
+                                       (b'1', 'Follow up with the client tomorrow.'),
+                                       (b'0', 'Archived note.'),
+                                       (b'1', 'Complete the code review.'),
+                                       (b'0', 'This note is no longer relevant.');
 
 -- rating
 INSERT INTO rating (user_id, branch_id, rating) VALUES
@@ -491,10 +509,9 @@ WHERE `order`.id = 1;
 
 
 
-SELECT Address.street, Address.city, Address.state, Address.pincode
-FROM Address
-         JOIN Orders ON Address.user_id = Orders.user_id
-WHERE Orders.id = 1;
+SELECT *
+FROM item
+WHERE item.category_type = 7;
 
 SELECT Restaurants.name, AVG(Rating.rating) as avg_rating, COUNT(Rating.rating) as rating_count
 FROM Restaurants
@@ -506,7 +523,7 @@ FROM Menu
          JOIN Orders ON Menu.id = Orders.menu_id
 GROUP BY Menu.name
 ORDER BY times_ordered DESC
-LIMIT 10;
+    LIMIT 10;
 
 select * from area a  where id IN (1,2,3)
 

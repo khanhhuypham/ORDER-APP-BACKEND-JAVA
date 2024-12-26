@@ -10,7 +10,6 @@ import lombok.*;
 @Setter
 @Builder
 public class CategoryResponseDTO {
-
     private Long id;
     private String name;
     private Boolean active;

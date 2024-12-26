@@ -9,12 +9,11 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ChildrenItemRepository extends JpaRepository<ChildrenItem,Long> {
-    @Query("SELECT ci FROM ChildrenItem ci WHERE ci.name LIKE :keyword")
-    List<ChildrenItem> searchByName(@Param("keyword") String keyword);
 
-
-    @Query("SELECT childrenTable " +
-            "FROM ChildrenItem childrenTable JOIN childrenTable.items joinTable " +
-            "WHERE joinTable.item.id = :parentId")
+    @Query(
+        "SELECT childrenItem FROM ChildrenItem childrenItem " +
+        "JOIN ItemOnChildrenItem itemOnChildrenItem ON itemOnChildrenItem.id.childrenItemId = childrenItem.id " +
+        "WHERE itemOnChildrenItem.id.itemId = :parentId"
+    )
     List<ChildrenItem> findByParentId(@Param("parentId") Long id);
 }

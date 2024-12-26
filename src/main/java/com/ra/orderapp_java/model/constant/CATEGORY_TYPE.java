@@ -7,7 +7,9 @@ public enum CATEGORY_TYPE {
     OTHER(3),
     SEAFOOD(4),
     SERVICE(5),
-    BUFFET_TICKET(6);
+    BUFFET_TICKET(6),
+    COMBO(7),
+    ADD_ONS(8);
 
     private final int value;
 

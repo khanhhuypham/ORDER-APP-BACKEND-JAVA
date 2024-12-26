@@ -1,6 +1,7 @@
 package com.ra.orderapp_java.controller;
 
 import com.ra.orderapp_java.model.dto.GenericResponse;
+import com.ra.orderapp_java.model.dto.ItemOnOrder.ItemOnOrderRequestDTO;
 import com.ra.orderapp_java.model.dto.PaginationDTO;
 import com.ra.orderapp_java.model.dto.item.ItemQueryDTO;
 import com.ra.orderapp_java.model.dto.item.ItemRequestDTO;
@@ -22,8 +23,6 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/order")
 public class OrderController {
-
-
     private final OrderService orderService;
 
     public OrderController(OrderService orderService) {
@@ -32,7 +31,6 @@ public class OrderController {
 
     @GetMapping
     public ResponseEntity<GenericResponse<PaginationDTO<OrderResponseDTO>>> index(@ModelAttribute OrderQueryDTO dto){
-
 
         return new ResponseEntity<>(
             GenericResponse.success(
@@ -70,14 +68,20 @@ public class OrderController {
     }
 
 
-    @PutMapping("/{id}")
-    public ResponseEntity<GenericResponse<?>> addItems(@PathVariable Long id, @RequestBody OrderRequestDTO dto){
+    @PutMapping("/{id}/add-items")
+    public ResponseEntity<GenericResponse<OrderResponseDTO>> addItems(@PathVariable Long id, @RequestBody List<ItemOnOrderRequestDTO> list){
         return new ResponseEntity<>(
-                GenericResponse.success(orderService.saveItemToOrder(id,null)),
-                HttpStatus.CREATED
+            GenericResponse.success(orderService.saveItemToOrder(id,list)),
+            HttpStatus.CREATED
         );
     }
 
-
+    @PutMapping("/{id}/cancel-item")
+    public ResponseEntity<GenericResponse<OrderResponseDTO>> cancelItems(@PathVariable Long id, @RequestBody List<ItemOnOrderRequestDTO> list){
+        return new ResponseEntity<>(
+                GenericResponse.success(orderService.saveItemToOrder(id,list)),
+                HttpStatus.CREATED
+        );
+    }
 
 }

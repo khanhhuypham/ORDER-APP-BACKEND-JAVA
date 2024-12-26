@@ -12,15 +12,15 @@ import java.util.List;
 
 
 public interface ItemRepository extends JpaRepository<Item,Long>{
-    @Query("select f from Item f where f.name like %:keyword%")
-    List<Item> searchByName(String keyword);
 
 
-    @Query("SELECT i FROM Item i " +
-            "WHERE (:category_type IS NULL OR i.category.type = :category_type) " +
-            "AND (:category_id IS NULL OR i.category.id = :category_id) " +
-            "AND (:out_of_stock IS NULL OR i.out_of_stock = :out_of_stock) " +
-            "AND (:search_key IS NULL OR i.name LIKE %:search_key%) "
+
+    @Query(
+        "SELECT i FROM Item i " +
+        "WHERE (:category_type IS NULL OR i.category_type = :category_type) " +
+        "AND (:category_id IS NULL OR i.category.id = :category_id) " +
+        "AND (:out_of_stock IS NULL OR i.out_of_stock = :out_of_stock) " +
+        "AND (:search_key IS NULL OR i.name LIKE %:search_key%) "
     )
     Page<Item> findAllByCondition(
             @Param("category_type") CATEGORY_TYPE category_type,

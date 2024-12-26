@@ -5,7 +5,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface ItemOnOrderRepository extends JpaRepository<ItemOnOrder,Long> {
-    @Query(value = "select * from ItemOnOrder where ItemOnOrder.id.itemId =:id ",nativeQuery = true)
-    ItemOnOrder findByItemId(@Param("id") Long id);
+    @Query(
+            "SELECT itemOnOrder FROM ItemOnOrder itemOnOrder " +
+            "WHERE itemOnOrder.id.itemId = :itemId " +
+            "AND itemOnOrder.id.orderId = :orderId"
+    )
+    Optional<ItemOnOrder> findByItemId(@Param("itemId") Long itemId, @Param("orderId") Long orderId);
+
+
 }

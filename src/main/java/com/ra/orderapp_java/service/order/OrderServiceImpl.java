@@ -3,7 +3,6 @@ package com.ra.orderapp_java.service.order;
 import com.ra.orderapp_java.model.constant.ORDER_STATUS;
 import com.ra.orderapp_java.model.dto.ItemOnOrder.ItemOnOrderRequestDTO;
 import com.ra.orderapp_java.model.dto.PaginationDTO;
-import com.ra.orderapp_java.model.dto.childrenItem.ChildrenItemResponseDTO;
 import com.ra.orderapp_java.model.dto.item.ItemResponseDTO;
 import com.ra.orderapp_java.model.dto.order.OrderQueryDTO;
 import com.ra.orderapp_java.model.dto.order.OrderRequestDTO;
@@ -24,6 +23,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import static java.util.stream.Collectors.toSet;
 
 @Transactional
@@ -31,8 +32,9 @@ import static java.util.stream.Collectors.toSet;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
     public final OrderRepository orderRepo;
-    public final ItemOnOrderRepository orderOnItemRepo;
     public final ItemService itemService;
+    public final ItemOnOrderRepository itemOnOrderRepo;
+
 
     @Override
     public PaginationDTO<OrderResponseDTO> findAll(OrderQueryDTO dto) {
@@ -73,8 +75,8 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public void saveItemToOrder(Long id, List<ItemOnOrderRequestDTO> dtoList) {
-        Order order = orderRepo.findById(id).orElse(null);
+    public OrderResponseDTO saveItemToOrder(Long orderId, List<ItemOnOrderRequestDTO> dtoList) {
+        Order order = orderRepo.findById(orderId).orElse(null);
 
         if (order != null) {
             // Precompute IDs of items already in the order for quick lookup
@@ -82,29 +84,34 @@ public class OrderServiceImpl implements OrderService{
                     .map(item -> item.getItem().getId())
                     .collect(toSet());
 
-            for (ItemOnOrderRequestDTO item : dtoList) {
-//                Ite order = itemService.findById(item.getId()).orElse(null);
+            for (ItemOnOrderRequestDTO dto : dtoList) {
 
-//                if (existingItemIds.contains(item.getId())) {
-//                    // Item is already in the order
-//                    ItemOnOrder itemOnOrder = orderOnItemRepo.findByItemId(item.getId());
-//                    if (itemOnOrder != null) {
-//                        itemOnOrder.setQuantity(item.getQuantity()); // Update the quantity
-//                        orderOnItemRepo.save(itemOnOrder); // Persist the update
-//                    }
-//                } else {
-//                    // Item is not in the order, create a new OrderOnItem
-//                    ItemOnOrder newItemOnOrder = new ItemOnOrder(order, item); // Assuming constructor accepts Order and Item
-//                    orderOnItemRepo.save(newItemOnOrder);
-//                }
+                Item item = itemService.findItemById(dto.getId());
+
+                if (item != null){
+                    if (existingItemIds.contains(item.getId())) {
+                        // Item is already in the order
+                        ItemOnOrder itemOnOrder = itemOnOrderRepo.findByItemId(item.getId(),orderId).orElse(null);
+
+                        if (itemOnOrder != null) {
+                            itemOnOrder.setQuantity(dto.getQuantity()); // Update the quantity
+                            itemOnOrderRepo.save(itemOnOrder); // Persist the update
+                        }
+
+                    } else {
+                        // Item is not in the order, create a new OrderOnItem
+                        ItemOnOrder newItemOnOrder = new ItemOnOrder(order, item,dto); // Assuming constructor accepts Order and Item
+                        itemOnOrderRepo.save(newItemOnOrder);
+                    }
+                }
             }
         }
-
+       return this.findById(orderId);
     }
 
     @Override
-    public void cancelItemOfOrder(Long id, List<Item> itemList) {
-        Order order = orderRepo.findById(id).orElse(null);
+    public OrderResponseDTO cancelItemOfOrder(Long orderId, List<Item> itemList) {
+        Order order = orderRepo.findById(orderId).orElse(null);
         if (order != null) {
             // Precompute IDs of items already in the order for quick lookup
             Set<Long> existingItemIds = order.getItems().stream()
@@ -114,19 +121,17 @@ public class OrderServiceImpl implements OrderService{
             for (Item item : itemList) {
                 if (existingItemIds.contains(item.getId())) {
                     // Item is already in the order
-                    ItemOnOrder itemOnOrder = orderOnItemRepo.findByItemId(item.getId());
+                    ItemOnOrder itemOnOrder = itemOnOrderRepo.findByItemId(item.getId(),orderId).orElse(null);
 
                     if (itemOnOrder != null) {
-//                        orderOnItem.setStatus();
-                        orderOnItemRepo.save(itemOnOrder); // Persist the update
+                        itemOnOrderRepo.save(itemOnOrder); // Persist the update
                     }
                 }
             }
         }
 
+        return this.findById(orderId);
     }
-
-
 
 
     @Override
@@ -143,8 +148,6 @@ public class OrderServiceImpl implements OrderService{
                 for (int i = 0; i < item.getChildren().size(); i++) {
                     item.getChildren().get(i).filterPropertiesForOrDetailDTO();
                 }
-
-
                 item.filterPropertiesForOrDetailDTO(element);
                 list.add(item);
             }
@@ -153,12 +156,8 @@ public class OrderServiceImpl implements OrderService{
 
         OrderResponseDTO dto = new OrderResponseDTO(order,list);
         dto.filterPropertiesForOrDetailDTO();
-
         return order == null ? null : dto;
     }
 
-    @Override
-    public void delete(Long id) {
 
-    }
 }

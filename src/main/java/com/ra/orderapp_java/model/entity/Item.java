@@ -1,12 +1,14 @@
 package com.ra.orderapp_java.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ra.orderapp_java.model.constant.CATEGORY_TYPE;
 import com.ra.orderapp_java.model.entity.JoinEntity.ItemOnChildrenItem;
 import com.ra.orderapp_java.model.entity.JoinEntity.ItemOnOrder;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -44,18 +46,23 @@ public class Item {
     private Unit unit;
 
     @ManyToOne
-    @JoinColumn(name = "category_id",referencedColumnName = "id")
+    @JoinColumn(name = "category_id",referencedColumnName = "id",nullable = true)
     private Category category;
+
+    @Column(name="category_type",columnDefinition = "integer default 1")
+    @Enumerated(EnumType.ORDINAL)
+    private CATEGORY_TYPE category_type = CATEGORY_TYPE.FOOD;
 
     @ManyToOne
     @JoinColumn(name = "printer_id",referencedColumnName = "id")
     private Printer printer;
 
-    @OneToMany(mappedBy = "item")
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     @JsonIgnore
-    Set<ItemOnChildrenItem> children;
+    List<ItemOnChildrenItem> children;
 
     @OneToMany(mappedBy = "item")
-    Set<ItemOnOrder> orders;
+    List<ItemOnOrder> orders;
 
 }

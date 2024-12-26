@@ -1,6 +1,5 @@
 package com.ra.orderapp_java.model.dto.payment;
 
-import com.ra.orderapp_java.model.entity.Category;
 import com.ra.orderapp_java.model.entity.Payment;
 import lombok.*;
 

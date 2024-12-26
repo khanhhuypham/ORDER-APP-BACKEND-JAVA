@@ -25,9 +25,9 @@ public class ChildrenItemResponseDTO {
     private Long category_id;
     private String unit_type;
     private String description;
+    private Float quantity;
 
-
-    public ChildrenItemResponseDTO(ChildrenItem childrenItem) {
+    public ChildrenItemResponseDTO(ChildrenItem childrenItem,Float quantity) {
         this.id = childrenItem.getId();
         this.name = childrenItem.getName();
         this.price = childrenItem.getPrice();
@@ -35,8 +35,14 @@ public class ChildrenItemResponseDTO {
         this.description = childrenItem.getDescription();
         this.category_id = childrenItem.getCategory().getId();
         this.unit_type = childrenItem.getUnit().getName();
+        this.quantity = quantity;
         this.additionalProperties = new HashMap<>();
         this.excludedProperties = new HashSet<>();
+    }
+
+    // Constructor without quantity (default quantity is null)
+    public ChildrenItemResponseDTO(ChildrenItem childrenItem) {
+        this(childrenItem, null); // Delegate to the main constructor
     }
 
     public void convertToModelForOrder() {
@@ -63,7 +69,7 @@ public class ChildrenItemResponseDTO {
         if (!excludedProperties.contains("description")) allProperties.put("description", description);
         if (!excludedProperties.contains("category_id")) allProperties.put("category_id", category_id);
         if (!excludedProperties.contains("unit_type")) allProperties.put("unit_type", unit_type);
-
+        if (!excludedProperties.contains("quantity")) allProperties.put("quantity", quantity);
 
         // Add additional properties
         allProperties.putAll(additionalProperties);

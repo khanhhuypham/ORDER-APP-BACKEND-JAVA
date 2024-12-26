@@ -34,12 +34,12 @@ public class ItemOnOrder {
     @EmbeddedId
     ItemOnOrderKey id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("orderId")
     @JoinColumn(name = "order_id")
     Order order;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("itemId")
     @JoinColumn(name = "item_id")
     Item item;
@@ -50,14 +50,12 @@ public class ItemOnOrder {
     @Column(name = "quantity")
     private Float quantity;
 
-    @Column(name = "amount")
-    private Double amount;
 
-    @Column(name = "net_amount")
-    private Double net_amount;
+    @Column(name = "discount_amount")
+    private Double discount_amount;
 
-    @Column(name = "discount")
-    private Integer discount;
+    @Column(name = "discount_percent")
+    private Integer discount_percent;
 
     @Column(name="status",columnDefinition = "integer default 0")
     @Enumerated(EnumType.ORDINAL)
@@ -66,18 +64,6 @@ public class ItemOnOrder {
     @Column(name = "note")
     private String note;
 
-    public ItemOnOrder(Order order, Item item) {
-        // Create ItemOnChildrenItemKey
-        ItemOnOrderKey id = new ItemOnOrderKey();
-        id.setItemId(item.getId());
-        id.setOrderId(order.getId());
-        this.id = id;
-        this.order = order;
-        this.item = item;
-        this.quantity = 1.0f;
-        this.amount =  9.5;
-        this.net_amount = 9.5;
-    }
 
     public ItemOnOrder(Order order,Item item, ItemOnOrderRequestDTO dto) {
         // Create ItemOnChildrenItemKey
@@ -88,9 +74,8 @@ public class ItemOnOrder {
         this.order = order;
         this.item = item;
         this.quantity = dto.getQuantity();
-//        this.amount =  dto.get
+        this.discount_amount = dto.getDiscount_amount();
+        this.discount_percent = dto.getDiscount_percent();
         this.note = dto.getNote();
-        this.net_amount = 9.5;
-
     }
 }

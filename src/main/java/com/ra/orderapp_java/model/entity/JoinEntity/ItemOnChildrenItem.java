@@ -1,6 +1,7 @@
 package com.ra.orderapp_java.model.entity.JoinEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ra.orderapp_java.model.constant.CATEGORY_TYPE;
 import com.ra.orderapp_java.model.entity.ChildrenItem;
 import com.ra.orderapp_java.model.entity.Item;
 import jakarta.persistence.*;
@@ -45,7 +46,6 @@ public class ItemOnChildrenItem {
     @JoinColumn(name = "children_item_id")
     ChildrenItem childrenItem;
 
-
     @Column(name = "quantity")
     private Float quantity;
 
@@ -55,17 +55,16 @@ public class ItemOnChildrenItem {
     @Column(name = "temporary_price")
     private Double temporary_price;
 
-    public ItemOnChildrenItem(Item item,ChildrenItem childrenItem) {
+    public ItemOnChildrenItem(Item item,ChildrenItem childrenItem,Float quantity) {
         // Create ItemOnChildrenItemKey
         ItemOnChildrenItemKey id = new ItemOnChildrenItemKey();
         id.setItemId(item.getId());
         id.setChildrenItemId(childrenItem.getId());
-
         this.id = id;
         this.item = item;
         this.childrenItem = childrenItem;
         this.price = item.getPrice();
-        this.quantity = 1.0f;
+        this.quantity = quantity;
         this.temporary_price = 9.5;
 
     }

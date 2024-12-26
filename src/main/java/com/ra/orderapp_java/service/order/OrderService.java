@@ -16,8 +16,8 @@ import java.util.List;
 public interface OrderService {
     PaginationDTO<OrderResponseDTO> findAll(OrderQueryDTO dto);
     OrderResponseDTO create(Long id, OrderRequestDTO dto);
-    void saveItemToOrder(Long id, List<ItemOnOrderRequestDTO> dtoList);
-    void cancelItemOfOrder(Long id, List<Item> itemList);
+    OrderResponseDTO saveItemToOrder(Long orderId, List<ItemOnOrderRequestDTO> dtoList);
+    OrderResponseDTO cancelItemOfOrder(Long orderId, List<Item> itemList);
     OrderResponseDTO findById(Long id);
-    void delete(Long id);
+
 }

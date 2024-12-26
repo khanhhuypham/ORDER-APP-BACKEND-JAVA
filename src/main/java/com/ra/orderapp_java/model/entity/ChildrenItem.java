@@ -5,7 +5,8 @@ import com.ra.orderapp_java.model.entity.JoinEntity.ItemOnChildrenItem;
 import jakarta.persistence.*;
         import lombok.*;
 
-        import java.util.Set;
+import java.util.List;
+import java.util.Set;
 
 
 @AllArgsConstructor
@@ -44,6 +45,6 @@ public class ChildrenItem {
     @JoinColumn(name = "category_id",referencedColumnName = "id")
     private Category category;
 
-    @OneToMany(mappedBy = "childrenItem")
-    Set<ItemOnChildrenItem> items;
+    @OneToMany(mappedBy = "childrenItem", cascade = CascadeType.ALL)
+    List<ItemOnChildrenItem> items;
 }
