@@ -1,7 +1,9 @@
 package com.ra.orderapp_java.service.user;
 
+import com.ra.orderapp_java.model.dto.table.TableResponseDTO;
 import com.ra.orderapp_java.model.dto.user.UserRequestDTO;
 import com.ra.orderapp_java.model.dto.user.UserResponseDTO;
+import com.ra.orderapp_java.model.entity.TableEntity;
 import com.ra.orderapp_java.model.entity.User;
 import com.ra.orderapp_java.repository.UserRepository;
 
@@ -30,6 +32,13 @@ public class UserServiceImpl implements UserService {
         }
 
         return list;
+    }
+
+    @Override
+    public UserResponseDTO findById(Long id) {
+        User user = userRepo.findById(id).orElse(null);
+
+        return user == null ? null : new UserResponseDTO(user);
     }
 
     @Override

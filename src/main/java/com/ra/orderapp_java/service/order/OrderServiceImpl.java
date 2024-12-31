@@ -1,7 +1,11 @@
 package com.ra.orderapp_java.service.order;
 
+import com.ra.orderapp_java.model.constant.ITEM_ON_ORDER_STATUS;
 import com.ra.orderapp_java.model.constant.ORDER_STATUS;
-import com.ra.orderapp_java.model.dto.ItemOnOrder.ItemOnOrderRequestDTO;
+import com.ra.orderapp_java.model.constant.ORDER_TYPE;
+import com.ra.orderapp_java.model.dto.ItemOnOrder.AddItemToOrderRequestDTO;
+import com.ra.orderapp_java.model.dto.ItemOnOrder.CancelItemOnOrderDTO;
+import com.ra.orderapp_java.model.dto.ItemOnOrder.ItemOnOrderDTO;
 import com.ra.orderapp_java.model.dto.PaginationDTO;
 import com.ra.orderapp_java.model.dto.item.ItemResponseDTO;
 import com.ra.orderapp_java.model.dto.order.OrderQueryDTO;
@@ -11,6 +15,9 @@ import com.ra.orderapp_java.model.entity.*;
 import com.ra.orderapp_java.model.entity.JoinEntity.ItemOnOrder;
 
 import com.ra.orderapp_java.repository.OrderRepository;
+import com.ra.orderapp_java.repository.PaymentRepository;
+import com.ra.orderapp_java.repository.TableRepository;
+import com.ra.orderapp_java.repository.UserRepository;
 import com.ra.orderapp_java.repository.joinEntity.ItemOnOrderRepository;
 import com.ra.orderapp_java.service.item.ItemService;
 import jakarta.transaction.Transactional;
@@ -31,7 +38,10 @@ import static java.util.stream.Collectors.toSet;
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
+    public final TableRepository tableRepo;
+    public final UserRepository userRepo;
     public final OrderRepository orderRepo;
+    public final PaymentRepository paymentRepo;
     public final ItemService itemService;
     public final ItemOnOrderRepository itemOnOrderRepo;
 
@@ -48,12 +58,10 @@ public class OrderServiceImpl implements OrderService{
                 .collect(Collectors.toList());
         }
 
-
-        System.out.println(dto.getType());
         Page<Order> result = orderRepo.findAllByCondition(
-            null,
+            status,
             dto.getSearch_key(),
-            null,
+            dto.getUser_id(),
             dto.getType(),
             pageable
         );
@@ -71,11 +79,26 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public OrderResponseDTO create(Long id, OrderRequestDTO dto) {
-        return null;
+
+        Order order = new Order();
+        Payment payment = paymentRepo.save(Payment.builder().build());
+        User user = userRepo.findById(dto.getUser_id()).orElse(null);
+        order.setPayment(payment);
+        order.setUser(user);
+
+        if (dto.getOrder_type() == ORDER_TYPE.DINE_IN){
+            TableEntity table = tableRepo.findById(dto.getTable_id()).orElse(null);
+            if (table != null ){
+                order.setTable(table);
+            }
+        }
+
+        Order savedOrder = orderRepo.save(order);
+        return new OrderResponseDTO(order);
     }
 
     @Override
-    public OrderResponseDTO saveItemToOrder(Long orderId, List<ItemOnOrderRequestDTO> dtoList) {
+    public OrderResponseDTO saveItemToOrder(Long orderId, AddItemToOrderRequestDTO dto) {
         Order order = orderRepo.findById(orderId).orElse(null);
 
         if (order != null) {
@@ -84,23 +107,22 @@ public class OrderServiceImpl implements OrderService{
                     .map(item -> item.getItem().getId())
                     .collect(toSet());
 
-            for (ItemOnOrderRequestDTO dto : dtoList) {
+            for (ItemOnOrderDTO element : dto.getItems()) {
 
-                Item item = itemService.findItemById(dto.getId());
+                Item item = itemService.findItemById(element.getId());
 
                 if (item != null){
                     if (existingItemIds.contains(item.getId())) {
                         // Item is already in the order
                         ItemOnOrder itemOnOrder = itemOnOrderRepo.findByItemId(item.getId(),orderId).orElse(null);
-
                         if (itemOnOrder != null) {
-                            itemOnOrder.setQuantity(dto.getQuantity()); // Update the quantity
+                            itemOnOrder.setQuantity(element.getQuantity()); // Update the quantity
                             itemOnOrderRepo.save(itemOnOrder); // Persist the update
                         }
-
                     } else {
                         // Item is not in the order, create a new OrderOnItem
-                        ItemOnOrder newItemOnOrder = new ItemOnOrder(order, item,dto); // Assuming constructor accepts Order and Item
+                        ItemOnOrder newItemOnOrder = new ItemOnOrder(order,item,element); // Assuming constructor accepts Order and Item
+                        System.out.println(newItemOnOrder.getStatus());
                         itemOnOrderRepo.save(newItemOnOrder);
                     }
                 }
@@ -110,7 +132,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public OrderResponseDTO cancelItemOfOrder(Long orderId, List<Item> itemList) {
+    public OrderResponseDTO cancelItemOfOrder(Long orderId, List<CancelItemOnOrderDTO> itemList) {
         Order order = orderRepo.findById(orderId).orElse(null);
         if (order != null) {
             // Precompute IDs of items already in the order for quick lookup
@@ -118,12 +140,13 @@ public class OrderServiceImpl implements OrderService{
                     .map(orderOnItem -> orderOnItem.getItem().getId())
                     .collect(toSet());
 
-            for (Item item : itemList) {
-                if (existingItemIds.contains(item.getId())) {
+            for (CancelItemOnOrderDTO cancelItem : itemList) {
+                if (existingItemIds.contains(cancelItem.getId())) {
                     // Item is already in the order
-                    ItemOnOrder itemOnOrder = itemOnOrderRepo.findByItemId(item.getId(),orderId).orElse(null);
+                    ItemOnOrder itemOnOrder = itemOnOrderRepo.findByItemId(cancelItem.getId(),orderId).orElse(null);
 
                     if (itemOnOrder != null) {
+                        itemOnOrder.setStatus(ITEM_ON_ORDER_STATUS.CANCELLED);
                         itemOnOrderRepo.save(itemOnOrder); // Persist the update
                     }
                 }

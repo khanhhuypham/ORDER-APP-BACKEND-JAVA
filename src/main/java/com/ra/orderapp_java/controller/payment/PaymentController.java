@@ -28,10 +28,10 @@ public class PaymentController {
         return new ResponseEntity<>(GenericResponse.success(paymentService.findAll()), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<PaymentResponseDTO> create(@RequestBody PaymentRequestDTO dto){
-        return new ResponseEntity<>(paymentService.create(null,dto), HttpStatus.CREATED);
-    }
+//    @PostMapping
+//    public ResponseEntity<PaymentResponseDTO> create(@RequestBody PaymentRequestDTO dto){
+//        return new ResponseEntity<>(paymentService.create(null,dto), HttpStatus.CREATED);
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable long id){
@@ -44,7 +44,6 @@ public class PaymentController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PaymentResponseDTO> update(@PathVariable Long id, @RequestBody PaymentRequestDTO dto){
-
         return new ResponseEntity<>(paymentService.create(id,dto),HttpStatus.CREATED);
     }
 

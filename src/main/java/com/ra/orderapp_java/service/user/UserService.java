@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface UserService {
     List<UserResponseDTO> findAll();
+    UserResponseDTO findById(Long id);
     UserResponseDTO create(UserRequestDTO dto);
 }

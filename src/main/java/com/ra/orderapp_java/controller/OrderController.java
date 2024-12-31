@@ -1,18 +1,14 @@
 package com.ra.orderapp_java.controller;
 
 import com.ra.orderapp_java.model.dto.GenericResponse;
-import com.ra.orderapp_java.model.dto.ItemOnOrder.ItemOnOrderRequestDTO;
+import com.ra.orderapp_java.model.dto.ItemOnOrder.AddItemToOrderRequestDTO;
+import com.ra.orderapp_java.model.dto.ItemOnOrder.CancelItemOnOrderDTO;
+import com.ra.orderapp_java.model.dto.ItemOnOrder.ItemOnOrderDTO;
 import com.ra.orderapp_java.model.dto.PaginationDTO;
-import com.ra.orderapp_java.model.dto.item.ItemQueryDTO;
-import com.ra.orderapp_java.model.dto.item.ItemRequestDTO;
-import com.ra.orderapp_java.model.dto.item.ItemResponseDTO;
 import com.ra.orderapp_java.model.dto.order.OrderQueryDTO;
 import com.ra.orderapp_java.model.dto.order.OrderRequestDTO;
 import com.ra.orderapp_java.model.dto.order.OrderResponseDTO;
-import com.ra.orderapp_java.model.dto.printer.PrinterRequestDTO;
-import com.ra.orderapp_java.model.dto.printer.PrinterResponseDTO;
 import com.ra.orderapp_java.service.order.OrderService;
-import com.ra.orderapp_java.service.printer.PrinterService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,14 +27,12 @@ public class OrderController {
 
     @GetMapping
     public ResponseEntity<GenericResponse<PaginationDTO<OrderResponseDTO>>> index(@ModelAttribute OrderQueryDTO dto){
-
         return new ResponseEntity<>(
             GenericResponse.success(
                 orderService.findAll(dto)
             ),
             HttpStatus.OK
         );
-
     }
 
     @GetMapping("/{id}")
@@ -50,7 +44,7 @@ public class OrderController {
         );
     }
 
-    @PostMapping()
+    @PostMapping("/create")
     public ResponseEntity<GenericResponse<OrderResponseDTO>> create(@RequestBody OrderRequestDTO dto){
         return new ResponseEntity<>(
             GenericResponse.success(orderService.create(null,dto)),
@@ -69,17 +63,17 @@ public class OrderController {
 
 
     @PutMapping("/{id}/add-items")
-    public ResponseEntity<GenericResponse<OrderResponseDTO>> addItems(@PathVariable Long id, @RequestBody List<ItemOnOrderRequestDTO> list){
+    public ResponseEntity<GenericResponse<OrderResponseDTO>> addItems(@PathVariable Long id, @RequestBody AddItemToOrderRequestDTO list){
         return new ResponseEntity<>(
             GenericResponse.success(orderService.saveItemToOrder(id,list)),
             HttpStatus.CREATED
         );
     }
 
-    @PutMapping("/{id}/cancel-item")
-    public ResponseEntity<GenericResponse<OrderResponseDTO>> cancelItems(@PathVariable Long id, @RequestBody List<ItemOnOrderRequestDTO> list){
+    @PutMapping("/{id}/cancel-items")
+    public ResponseEntity<GenericResponse<OrderResponseDTO>> cancelItems(@PathVariable Long id, @RequestBody List<CancelItemOnOrderDTO> list){
         return new ResponseEntity<>(
-                GenericResponse.success(orderService.saveItemToOrder(id,list)),
+                GenericResponse.success(orderService.cancelItemOfOrder(id,list)),
                 HttpStatus.CREATED
         );
     }

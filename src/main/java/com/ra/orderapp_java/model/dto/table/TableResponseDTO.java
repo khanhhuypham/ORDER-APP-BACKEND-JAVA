@@ -19,7 +19,7 @@ import java.util.*;
 public class TableResponseDTO {
     private Long id;
     private String name;
-    private Integer status;
+
     private Boolean active;
     private Long area_id;
     private Long total_slot;
@@ -29,9 +29,9 @@ public class TableResponseDTO {
         this.id = table.getId();
         this.name = table.getName();
 
-        if (table.getStatus() != null) {
-            this.status = table.getStatus().getValue();
-        }
+//        if (table.getStatus() != null) {
+//            this.status = table.getStatus().getValue();
+//        }
 
         // Find the active order (assuming only one active order per table)
         if (table.getOrders() != null) {

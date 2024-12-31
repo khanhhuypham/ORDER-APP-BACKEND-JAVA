@@ -30,7 +30,17 @@ public class TableController {
         @RequestParam(name = "active",required = false) Boolean active
     ){
         return new ResponseEntity<>(
-            GenericResponse.success(tableService.findAll(area_id,active)),
+            GenericResponse.success(tableService.findAllByCondition(area_id,active)),
+            HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/management")
+    public ResponseEntity<GenericResponse<List<TableResponseDTO>>> findAll(
+        @RequestParam(name = "area_id",required = false) Long area_id
+    ){
+        return new ResponseEntity<>(
+            GenericResponse.success(tableService.findAllForManagement(area_id)),
             HttpStatus.OK
         );
     }

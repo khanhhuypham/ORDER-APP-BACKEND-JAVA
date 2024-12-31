@@ -15,6 +15,7 @@ import java.util.Set;
 @Setter
 @Builder
 public class UserResponseDTO {
+    private Long id;
     private String username;
     private String fullName;
     private String email;
@@ -23,6 +24,7 @@ public class UserResponseDTO {
     private Set<Role> roles;
 
     public UserResponseDTO(User user) {
+        this.id = user.getId();
         this.username = user.getUsername();
         this.fullName = user.getFullName();
         this.email = user.getEmail();

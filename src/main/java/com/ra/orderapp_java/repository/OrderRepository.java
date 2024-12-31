@@ -17,10 +17,10 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order,Long> {
     @Query(
         "SELECT o FROM Order o " +
-        "JOIN TableEntity t ON t.id = o.table.id " +
+        "LEFT JOIN TableEntity t ON t.id = o.table.id " +
         "JOIN Payment p ON p.id = o.payment.id " +
         "WHERE (:status IS NULL OR o.status IN :status) " +
-        "AND (:search_key IS NULL OR t.name LIKE %:search_key%) " +
+        "AND (COALESCE(:search_key, '') = '' OR :search_key IS NULL OR t.name LIKE %:search_key%) " +
         "AND (:user_id IS NULL OR o.user.id = :user_id) " +
         "AND (:type IS NULL OR o.type = :type)"
     )

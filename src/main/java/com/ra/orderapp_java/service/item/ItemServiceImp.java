@@ -2,6 +2,7 @@ package com.ra.orderapp_java.service.item;
 
 
 import com.ra.orderapp_java.model.constant.CATEGORY_TYPE;
+import com.ra.orderapp_java.model.constant.ORDER_STATUS;
 import com.ra.orderapp_java.model.dto.PaginationDTO;
 import com.ra.orderapp_java.model.dto.childrenItem.ChildrenItemRequestDTO;
 import com.ra.orderapp_java.model.dto.childrenItem.ChildrenItemResponseDTO;
@@ -42,10 +43,13 @@ public class ItemServiceImp implements ItemService {
 
         List<ItemResponseDTO> list = new ArrayList();
         Pageable pageable  = PageRequest.of(dto.getPage() - 1, dto.getLimit());
-        CATEGORY_TYPE category_type = null;
+
+        List<CATEGORY_TYPE> category_type = null;
 
         if (dto.getCategory_type() != null){
-            category_type = CATEGORY_TYPE.fromValue(dto.getCategory_type());
+            category_type = dto.getCategory_type().stream()
+                .map(CATEGORY_TYPE::fromValue)
+                .collect(Collectors.toList());
         }
 
         Page<Item> result = itemRepo.findAllByCondition(

@@ -1,12 +1,8 @@
 package com.ra.orderapp_java.service.table;
-
-
-import com.ra.orderapp_java.model.constant.ORDER_STATUS;
 import com.ra.orderapp_java.model.dto.table.BatchCreateTableDto;
 import com.ra.orderapp_java.model.dto.table.TableRequestDTO;
 import com.ra.orderapp_java.model.dto.table.TableResponseDTO;
 import com.ra.orderapp_java.model.entity.Area;
-import com.ra.orderapp_java.model.entity.Order;
 import com.ra.orderapp_java.model.entity.TableEntity;
 import com.ra.orderapp_java.repository.AreaRepository;
 import com.ra.orderapp_java.repository.TableRepository;
@@ -28,7 +24,7 @@ public class TableServiceImpl implements TableService{
 
 
     @Override
-    public List<TableResponseDTO> findAll(Long areaId,Boolean active) {
+    public List<TableResponseDTO> findAllByCondition(Long areaId,Boolean active) {
         List<TableResponseDTO> list = new ArrayList();
 
         for(TableEntity table : tableRepo.findAllByCondition(areaId,active)) {
@@ -38,6 +34,18 @@ public class TableServiceImpl implements TableService{
         return list;
     }
 
+    @Override
+    public List<TableResponseDTO> findAllForManagement(Long areaId) {
+        List<TableResponseDTO> list = new ArrayList();
+
+        for(TableEntity table : tableRepo.findAllForManagement(areaId)) {
+            TableResponseDTO dto = new TableResponseDTO(table);
+            dto.setOrder(null);
+            list.add(dto);
+        }
+
+        return list;
+    }
 
 
 
@@ -57,7 +65,6 @@ public class TableServiceImpl implements TableService{
             table = tableRepo.save(TableEntity.builder()
                 .id(id)
                 .name(dto.getName())
-                .status(foundTable.getStatus())
                 .active(dto.getActive())
                 .area(area)
                 .build());

@@ -2,6 +2,7 @@ package com.ra.orderapp_java.service.payment;
 
 import com.ra.orderapp_java.model.dto.payment.PaymentRequestDTO;
 import com.ra.orderapp_java.model.dto.payment.PaymentResponseDTO;
+import com.ra.orderapp_java.model.entity.Item;
 import com.ra.orderapp_java.model.entity.Payment;
 import com.ra.orderapp_java.repository.PaymentRepository;
 import org.springframework.stereotype.Service;
@@ -30,17 +31,20 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentResponseDTO create(Long id, PaymentRequestDTO dto) {
-        Payment payment = paymentRepo.save(Payment.builder()
-            .id(id)
-            .discount(dto.getDiscount())
-            .tax(dto.getTax())
-            .surcharge(dto.getSurcharge())
-            .amount(dto.getAmount())
-            .net_amount(dto.getNet_amount())
-            .method(dto.getMethod())
-            .status(dto.getStatus())
-            .build());
-        return new PaymentResponseDTO(payment);
+        Payment payment = paymentRepo.findById(id).orElse(null);
+
+        Payment.PaymentBuilder paymentBuilder = Payment.builder();
+
+
+        if (payment !=null){
+            paymentBuilder.id(id)
+                .discount(dto.getDiscount())
+                .tax(dto.getTax())
+                .surcharge(dto.getSurcharge())
+                .method(dto.getMethod());
+        }
+
+        return new PaymentResponseDTO(paymentBuilder.build());
     }
 
     @Override

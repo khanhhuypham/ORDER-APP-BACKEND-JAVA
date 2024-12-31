@@ -26,6 +26,6 @@ public class PaymentResponseDTO {
         this.amount = payment.getAmount();
         this.net_amount = payment.getNet_amount();
         this.method = payment.getMethod();
-        this.status = payment.getStatus();
+        this.status = payment.getStatus().getValue();
     }
 }

@@ -1,8 +1,15 @@
 package com.ra.orderapp_java.model.constant;
 
 public enum ITEM_ON_ORDER_STATUS {
-    COOKING(0), // ĐANG PHỤC VỤ
-    COMPLETE(1); // YÊU CẦU THANH TOÁN
+    WAITING_PROCESS(0),
+    COOKING(1),
+    COMPLETE(2),
+    NOT_ENOUGH(3),
+    CANCELLED(4),
+    A(5),
+    B(6),
+    SERVICE_BLOCK_USING(7),
+    SERVICE_BLOCK_STOP(8);
 
     private final int value;
 
@@ -14,3 +21,4 @@ public enum ITEM_ON_ORDER_STATUS {
         return value;
     }
 }
+

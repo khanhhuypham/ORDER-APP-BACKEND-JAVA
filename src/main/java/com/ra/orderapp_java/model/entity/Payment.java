@@ -1,6 +1,7 @@
 package com.ra.orderapp_java.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ra.orderapp_java.model.constant.PAYMENT_STATUS;
 import com.ra.orderapp_java.model.constant.PRINTER_TYPE;
 import jakarta.persistence.*;
 import lombok.*;
@@ -40,6 +41,8 @@ public class Payment {
     private Integer method;
 
     @Column(name = "status")
-    private Integer status;
+    @Enumerated(EnumType.ORDINAL)
+    @Builder.Default
+    private PAYMENT_STATUS status = PAYMENT_STATUS.UNCOMPLETE;
 }
 

@@ -1,7 +1,6 @@
 package com.ra.orderapp_java.model.dto.table;
 
 
-import com.ra.orderapp_java.model.constant.TABLE_STATUS;
 import lombok.*;
 
 import java.lang.reflect.Field;

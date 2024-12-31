@@ -4,6 +4,8 @@ import com.ra.orderapp_java.model.constant.CATEGORY_TYPE;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -14,7 +16,7 @@ public class ItemQueryDTO {
     private Integer limit;
     @Min(value = 1,message = "page must be greater than 1")
     private Integer page;
-    private Integer category_type;
+    private List<Integer> category_type;
     private Long category_id;
     private Boolean out_of_stock;
 

@@ -1,8 +1,5 @@
 package com.ra.orderapp_java.model.dto.ItemOnOrder;
 
-import com.ra.orderapp_java.model.constant.ITEM_ON_ORDER_STATUS;
-import com.ra.orderapp_java.model.dto.childrenItem.ChildrenItemResponseDTO;
-import com.ra.orderapp_java.model.entity.Order;
 import lombok.*;
 
 import java.util.List;
@@ -12,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class ItemOnOrderRequestDTO {
+public class ItemOnOrderDTO {
     private Long id;
     private Float quantity;
     private Double discount_amount;
