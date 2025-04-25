@@ -1,5 +1,6 @@
 package com.ra.orderapp_java.service.unit;
 
+import com.ra.orderapp_java.advice.CustomException;
 import com.ra.orderapp_java.model.dto.table.TableResponseDTO;
 import com.ra.orderapp_java.model.dto.unit.UnitRequestDTO;
 import com.ra.orderapp_java.model.dto.unit.UnitResponseDTO;
@@ -7,6 +8,7 @@ import com.ra.orderapp_java.model.entity.TableEntity;
 import com.ra.orderapp_java.model.entity.Unit;
 import com.ra.orderapp_java.repository.TableRepository;
 import com.ra.orderapp_java.repository.UnitRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,32 +24,33 @@ public class UnitServiceImpl implements UnitService{
 
 
     @Override
-    public List<UnitResponseDTO> findAll() {
-        List<UnitResponseDTO> list = new ArrayList();
-        for(Unit unit : unitRepo.findAll()) {
-            list.add(new UnitResponseDTO(unit));
+    public List<Unit> findAll() {
+        return unitRepo.findAll();
+    }
+
+    @Override
+    public Unit create(Long id, UnitRequestDTO dto) throws CustomException {
+
+        Unit unit = id == null ? Unit.builder().build() : this.findById(id);
+
+        unit.setName(dto.getName());
+
+        return unitRepo.save(unit);
+    }
+
+    @Override
+    public Unit findById(Long id) throws CustomException {
+
+        Unit unit = unitRepo.findById(id).orElse(null);
+        if (unit == null){
+            throw new CustomException("Unit Not found", HttpStatus.NOT_FOUND);
         }
 
-        return list;
+        return unit;
     }
 
     @Override
-    public UnitResponseDTO create(Long id, UnitRequestDTO dto) {
-        Unit unit = unitRepo.save(Unit.builder()
-                .id(id)
-                .name(dto.getName())
-                .build());
-        return new UnitResponseDTO(unit);
-    }
-
-    @Override
-    public UnitResponseDTO findById(Long id) {
-        Unit unit = unitRepo.findById(id).orElse(null);
-        return unit == null ? null : new UnitResponseDTO(unit);
-    }
-
-    @Override
-    public void delete(long id) {
+    public void delete(long id)  throws CustomException {
         unitRepo.deleteById(id);
     }
 }

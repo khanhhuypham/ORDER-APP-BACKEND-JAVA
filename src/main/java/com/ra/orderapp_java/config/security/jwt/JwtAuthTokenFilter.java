@@ -1,6 +1,6 @@
-package com.ra.orderapp_java.security.jwt;
+package com.ra.orderapp_java.config.security.jwt;
 
-import com.ra.orderapp_java.security.UserDetailService;
+import com.ra.orderapp_java.config.security.UserDetailService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

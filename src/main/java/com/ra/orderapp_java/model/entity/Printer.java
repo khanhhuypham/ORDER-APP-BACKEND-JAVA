@@ -1,6 +1,8 @@
 package com.ra.orderapp_java.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ra.orderapp_java.model.constant.CONNECTION_TYPE;
+import com.ra.orderapp_java.model.constant.ORDER_TYPE;
 import com.ra.orderapp_java.model.constant.PRINTER_TYPE;
 import jakarta.persistence.*;
 import lombok.*;
@@ -34,7 +36,9 @@ public class Printer {
     private Integer port;
 
     @Column(name = "connection_type")
-    private Integer connection_type;
+    @Enumerated(EnumType.ORDINAL)
+    @Builder.Default
+    private CONNECTION_TYPE connection_type = CONNECTION_TYPE.WIFI;
 
     @Column(name = "print_number")
     private Integer print_number;
@@ -45,9 +49,10 @@ public class Printer {
     @Column(name = "active")
     private Boolean active;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "type")
-    private PRINTER_TYPE type;
+    @Enumerated(EnumType.ORDINAL)
+    @Builder.Default
+    private PRINTER_TYPE type = PRINTER_TYPE.FOOD;
 
     @OneToMany(mappedBy = "printer")
     @JsonIgnore

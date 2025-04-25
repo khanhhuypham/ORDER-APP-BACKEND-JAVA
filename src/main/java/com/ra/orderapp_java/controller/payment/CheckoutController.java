@@ -1,6 +1,6 @@
 package com.ra.orderapp_java.controller.payment;
 
-import com.ra.orderapp_java.model.dto.GenericResponse;
+import com.ra.orderapp_java.model.dto.ResponseWrapper;
 import com.ra.orderapp_java.model.dto.payment.StripeCheckoutDTO;
 import com.ra.orderapp_java.model.dto.payment.StripeResponse;
 import com.ra.orderapp_java.service.payment.StripeService;
@@ -57,12 +57,12 @@ public class CheckoutController {
 
 
     @PostMapping("/stripe-host-checkout")
-    public ResponseEntity<GenericResponse<?>> checkoutProducts(@Valid @RequestBody StripeCheckoutDTO dto) throws StripeException {
+    public ResponseEntity<ResponseWrapper<?>> checkoutProducts(@Valid @RequestBody StripeCheckoutDTO dto) throws StripeException {
 
         StripeResponse stripeResponse = stripeService.checkout(dto);
 
         return new ResponseEntity<>(
-            GenericResponse.success(stripeResponse),
+            ResponseWrapper.success(stripeResponse),
             HttpStatus.CREATED
         );
 
@@ -74,7 +74,7 @@ public class CheckoutController {
         String stripeResponse = stripeService.integratedCheckout(dto);
 
         return new ResponseEntity<>(
-            GenericResponse.success(stripeResponse),
+            ResponseWrapper.success(stripeResponse),
             HttpStatus.CREATED
         );
 

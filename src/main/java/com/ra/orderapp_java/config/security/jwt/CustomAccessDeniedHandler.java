@@ -1,4 +1,4 @@
-package com.ra.orderapp_java.security.jwt;
+package com.ra.orderapp_java.config.security.jwt;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

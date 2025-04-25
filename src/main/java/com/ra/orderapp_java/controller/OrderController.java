@@ -1,9 +1,9 @@
 package com.ra.orderapp_java.controller;
 
-import com.ra.orderapp_java.model.dto.GenericResponse;
+import com.ra.orderapp_java.advice.CustomException;
+import com.ra.orderapp_java.model.dto.ResponseWrapper;
 import com.ra.orderapp_java.model.dto.ItemOnOrder.AddItemToOrderRequestDTO;
 import com.ra.orderapp_java.model.dto.ItemOnOrder.CancelItemOnOrderDTO;
-import com.ra.orderapp_java.model.dto.ItemOnOrder.ItemOnOrderDTO;
 import com.ra.orderapp_java.model.dto.PaginationDTO;
 import com.ra.orderapp_java.model.dto.order.OrderQueryDTO;
 import com.ra.orderapp_java.model.dto.order.OrderRequestDTO;
@@ -26,9 +26,9 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<GenericResponse<PaginationDTO<OrderResponseDTO>>> index(@ModelAttribute OrderQueryDTO dto){
+    public ResponseEntity<ResponseWrapper<PaginationDTO<OrderResponseDTO>>> index(@ModelAttribute OrderQueryDTO dto){
         return new ResponseEntity<>(
-            GenericResponse.success(
+            ResponseWrapper.success(
                 orderService.findAll(dto)
             ),
             HttpStatus.OK
@@ -36,46 +36,62 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GenericResponse<OrderResponseDTO>> findById(@PathVariable Long id){
-        OrderResponseDTO dto = orderService.findById(id);
+    public ResponseEntity<ResponseWrapper<OrderResponseDTO>> findById(@PathVariable Long id){
+
+        OrderResponseDTO dto = orderService.findOrderResponseDTOById(id);
+
         return new ResponseEntity<>(
-            GenericResponse.success(dto),
+            ResponseWrapper.success(dto),
             dto == null ? HttpStatus.NOT_FOUND : HttpStatus.OK
         );
     }
 
     @PostMapping("/create")
-    public ResponseEntity<GenericResponse<OrderResponseDTO>> create(@RequestBody OrderRequestDTO dto){
+    public ResponseEntity<ResponseWrapper<OrderResponseDTO>> create(@RequestBody OrderRequestDTO dto) throws CustomException {
+        OrderResponseDTO result =  new OrderResponseDTO(orderService.create(null,dto));
+
         return new ResponseEntity<>(
-            GenericResponse.success(orderService.create(null,dto)),
+            ResponseWrapper.success(result),
             HttpStatus.CREATED
         );
 
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GenericResponse<OrderResponseDTO>> update(@PathVariable Long id, @RequestBody OrderRequestDTO dto){
+    public ResponseEntity<ResponseWrapper<OrderResponseDTO>> update(@PathVariable Long id, @RequestBody OrderRequestDTO dto) throws CustomException {
+        OrderResponseDTO result =  new OrderResponseDTO(orderService.create(id,dto));
         return new ResponseEntity<>(
-            GenericResponse.success(orderService.create(id,dto)),
+            ResponseWrapper.success(result),
             HttpStatus.CREATED
         );
     }
 
 
     @PutMapping("/{id}/add-items")
-    public ResponseEntity<GenericResponse<OrderResponseDTO>> addItems(@PathVariable Long id, @RequestBody AddItemToOrderRequestDTO list){
+    public ResponseEntity<ResponseWrapper<String>> addItems(@PathVariable Long id, @RequestBody AddItemToOrderRequestDTO list) throws CustomException {
+
+        orderService.saveItemToOrder(id,list);
+
         return new ResponseEntity<>(
-            GenericResponse.success(orderService.saveItemToOrder(id,list)),
+            ResponseWrapper.success("Add successfully"),
             HttpStatus.CREATED
         );
     }
 
     @PutMapping("/{id}/cancel-items")
-    public ResponseEntity<GenericResponse<OrderResponseDTO>> cancelItems(@PathVariable Long id, @RequestBody List<CancelItemOnOrderDTO> list){
+    public ResponseEntity<ResponseWrapper<String>> cancelItems(@PathVariable Long id, @RequestBody List<CancelItemOnOrderDTO> list) throws CustomException {
+        orderService.cancelItemOfOrder(id,list);
+
         return new ResponseEntity<>(
-                GenericResponse.success(orderService.cancelItemOfOrder(id,list)),
+                ResponseWrapper.success("Cancel items successfully"),
                 HttpStatus.CREATED
         );
+    }
+
+    @GetMapping("/{id}/cancel")
+    public ResponseEntity<ResponseWrapper<String>> cancelOrder(@PathVariable Long id) throws CustomException {
+        orderService.cancelOrder(id);
+        return new ResponseEntity<>(ResponseWrapper.success("Cancel order successfully"), HttpStatus.OK);
     }
 
 }

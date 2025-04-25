@@ -32,7 +32,7 @@ public class PrinterResponseDTO {
         this.printer_name = printer.getPrinter_name();
         this.ip_address = printer.getIp_address();
         this.port = printer.getPort();
-        this.connection_type = printer.getConnection_type();
+        this.connection_type = printer.getConnection_type().getValue();
         this.print_number = printer.getPrint_number();
         this.is_print_each_paper = printer.getIs_print_each_paper();
         this.active = printer.getActive();

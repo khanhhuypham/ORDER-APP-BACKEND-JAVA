@@ -1,5 +1,6 @@
 package com.ra.orderapp_java.service.user;
 
+import com.ra.orderapp_java.advice.CustomException;
 import com.ra.orderapp_java.model.dto.table.TableResponseDTO;
 import com.ra.orderapp_java.model.dto.user.UserRequestDTO;
 import com.ra.orderapp_java.model.dto.user.UserResponseDTO;
@@ -8,6 +9,7 @@ import com.ra.orderapp_java.model.entity.User;
 import com.ra.orderapp_java.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -35,10 +37,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO findById(Long id) {
+    public User findById(Long id) throws CustomException {
         User user = userRepo.findById(id).orElse(null);
+        if (user == null) {
+            throw  new CustomException("User not found", HttpStatus.NOT_FOUND);
+        }
 
-        return user == null ? null : new UserResponseDTO(user);
+        return user;
     }
 
     @Override

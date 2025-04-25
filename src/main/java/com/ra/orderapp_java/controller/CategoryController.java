@@ -1,19 +1,18 @@
 package com.ra.orderapp_java.controller;
 
 
+import com.ra.orderapp_java.advice.CustomException;
 import com.ra.orderapp_java.model.constant.CATEGORY_TYPE;
-import com.ra.orderapp_java.model.dto.GenericResponse;
+import com.ra.orderapp_java.model.dto.ResponseWrapper;
 import com.ra.orderapp_java.model.dto.category.CategoryRequestDTO;
 import com.ra.orderapp_java.model.dto.category.CategoryResponseDTO;
-import com.ra.orderapp_java.model.dto.printer.PrinterResponseDTO;
+import com.ra.orderapp_java.model.entity.Category;
 import com.ra.orderapp_java.service.category.CategoryService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -27,45 +26,44 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<GenericResponse<List<CategoryResponseDTO>>> index(
+    public ResponseEntity<ResponseWrapper<List<CategoryResponseDTO>>> index(
         @RequestParam(name = "active",required = false) Boolean active,
         @RequestParam(name = "type",required = false) Integer type
     ){
-        CATEGORY_TYPE category = null;
+        CATEGORY_TYPE category_type = null;
         if (type != null){
-            category = CATEGORY_TYPE.fromValue(type);
+            category_type = CATEGORY_TYPE.fromValue(type);
         }
 
-        return new ResponseEntity<>(
-            GenericResponse.success(categoryService.findAll(active,category)),
-            HttpStatus.OK
-        );
+        List<CategoryResponseDTO> list = new ArrayList<>();
+
+        for (Category category: categoryService.findAll(active,category_type)) {
+            list.add(new CategoryResponseDTO(category));
+        }
+
+        return new ResponseEntity<>(ResponseWrapper.success(list),HttpStatus.OK);
     }
 
 
     @PostMapping
-    public ResponseEntity<GenericResponse<CategoryResponseDTO>> create(@RequestBody CategoryRequestDTO dto){
-        return new ResponseEntity<>(
-            GenericResponse.success(categoryService.create(null,dto)),
-            HttpStatus.CREATED
-        );
+    public ResponseEntity<ResponseWrapper<CategoryResponseDTO>> create(@RequestBody CategoryRequestDTO dto) throws CustomException {
+        CategoryResponseDTO result = new CategoryResponseDTO(categoryService.create(null,dto));
+        return new ResponseEntity<>(ResponseWrapper.success(result), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GenericResponse<CategoryResponseDTO>> findById(@PathVariable long id){
-        CategoryResponseDTO dto = categoryService.findById(id);
+    public ResponseEntity<ResponseWrapper<CategoryResponseDTO>> findById(@PathVariable long id) throws CustomException {
+        CategoryResponseDTO dto = new CategoryResponseDTO(categoryService.findById(id));
         return new ResponseEntity<>(
-            GenericResponse.success(dto),
+            ResponseWrapper.success(dto),
             dto == null ? HttpStatus.NOT_FOUND : HttpStatus.OK
         );
     }
 //    @CrossOrigin()
     @PutMapping("/{id}")
-    public ResponseEntity<GenericResponse<CategoryResponseDTO>> update(@PathVariable Long id, @RequestBody CategoryRequestDTO dto){
-        return new ResponseEntity<>(
-            GenericResponse.success(categoryService.create(id,dto)),
-            HttpStatus.CREATED
-        );
+    public ResponseEntity<ResponseWrapper<CategoryResponseDTO>> update(@PathVariable Long id, @RequestBody CategoryRequestDTO dto) throws CustomException {
+        CategoryResponseDTO result = new CategoryResponseDTO(categoryService.create(id,dto));
+        return new ResponseEntity<>(ResponseWrapper.success(result), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

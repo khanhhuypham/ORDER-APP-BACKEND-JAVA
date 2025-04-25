@@ -1,4 +1,4 @@
-package com.ra.orderapp_java.security;
+package com.ra.orderapp_java.config.security;
 
 import com.ra.orderapp_java.model.entity.User;
 import com.ra.orderapp_java.repository.UserRepository;

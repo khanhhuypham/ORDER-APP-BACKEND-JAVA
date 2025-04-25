@@ -1,15 +1,18 @@
 package com.ra.orderapp_java.controller;
 
-import com.ra.orderapp_java.model.dto.GenericResponse;
+import com.ra.orderapp_java.advice.CustomException;
+import com.ra.orderapp_java.model.dto.ResponseWrapper;
 import com.ra.orderapp_java.model.dto.printer.PrinterRequestDTO;
 import com.ra.orderapp_java.model.dto.printer.PrinterResponseDTO;
 
+import com.ra.orderapp_java.model.entity.Printer;
 import com.ra.orderapp_java.service.printer.PrinterService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -24,32 +27,33 @@ public class PrinterController {
 
 
     @GetMapping
-    public ResponseEntity<GenericResponse<List<PrinterResponseDTO>>> index(){
-        return new ResponseEntity<>(GenericResponse.success(printerService.findAll()), HttpStatus.OK);
+    public ResponseEntity<ResponseWrapper<List<PrinterResponseDTO>>> index(){
+
+        List<PrinterResponseDTO> list = new ArrayList();
+
+        for(Printer printer : printerService.findAll()) {
+            list.add(new PrinterResponseDTO(printer));
+        }
+
+        return new ResponseEntity<>(ResponseWrapper.success(list), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<GenericResponse<PrinterResponseDTO>> create(@RequestBody PrinterRequestDTO dto){
-        return new ResponseEntity<>(GenericResponse.success(printerService.create(null,dto)), HttpStatus.CREATED);
+    public ResponseEntity<ResponseWrapper<PrinterResponseDTO>> create(@RequestBody PrinterRequestDTO dto){
+        PrinterResponseDTO result = new PrinterResponseDTO(printerService.create(null,dto));
+        return new ResponseEntity<>(ResponseWrapper.success(result), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GenericResponse<PrinterResponseDTO>> findById(@PathVariable long id){
-        PrinterResponseDTO dto = printerService.findById(id);
-
-        return new ResponseEntity<>(
-            GenericResponse.success(dto),
-            dto == null ? HttpStatus.NOT_FOUND : HttpStatus.OK
-        );
-
+    public ResponseEntity<ResponseWrapper<PrinterResponseDTO>> findById(@PathVariable long id) throws CustomException {
+        PrinterResponseDTO dto = new PrinterResponseDTO(printerService.findById(id));
+        return new ResponseEntity<>(ResponseWrapper.success(dto), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GenericResponse<PrinterResponseDTO>> update(@PathVariable Long id, @RequestBody PrinterRequestDTO dto){
-        return new ResponseEntity<>(
-            GenericResponse.success(printerService.create(id,dto)),
-            HttpStatus.CREATED
-        );
+    public ResponseEntity<ResponseWrapper<PrinterResponseDTO>> update(@PathVariable Long id, @RequestBody PrinterRequestDTO dto){
+        PrinterResponseDTO result = new PrinterResponseDTO(printerService.create(id,dto));
+        return new ResponseEntity<>(ResponseWrapper.success(result),HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

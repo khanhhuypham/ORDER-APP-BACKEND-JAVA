@@ -1,7 +1,7 @@
 package com.ra.orderapp_java.controller;
 
 
-import com.ra.orderapp_java.model.dto.GenericResponse;
+import com.ra.orderapp_java.model.dto.ResponseWrapper;
 import com.ra.orderapp_java.model.dto.PaginationDTO;
 import com.ra.orderapp_java.model.dto.item.ItemQueryDTO;
 import com.ra.orderapp_java.model.dto.item.ItemRequestDTO;
@@ -24,10 +24,10 @@ public class ItemController {
     }
 
     @GetMapping
-    public ResponseEntity<GenericResponse<PaginationDTO<ItemResponseDTO>>> index(@ModelAttribute ItemQueryDTO dto){
+    public ResponseEntity<ResponseWrapper<PaginationDTO<ItemResponseDTO>>> index(@ModelAttribute ItemQueryDTO dto){
 
         return new ResponseEntity<>(
-            GenericResponse.success(
+            ResponseWrapper.success(
                 itemService.findAll(dto)
             ),
             HttpStatus.OK
@@ -36,28 +36,28 @@ public class ItemController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GenericResponse<ItemResponseDTO>> findById(@PathVariable Long id){
+    public ResponseEntity<ResponseWrapper<ItemResponseDTO>> findById(@PathVariable Long id){
         ItemResponseDTO dto = itemService.findById(id);
         return new ResponseEntity<>(
-                GenericResponse.success(dto),
+                ResponseWrapper.success(dto),
                 dto == null ? HttpStatus.NOT_FOUND : HttpStatus.OK
         );
     }
 
     @PostMapping()
-    public ResponseEntity<GenericResponse<ItemResponseDTO>> create(@RequestBody ItemRequestDTO dto){
+    public ResponseEntity<ResponseWrapper<ItemResponseDTO>> create(@RequestBody ItemRequestDTO dto){
 
         return new ResponseEntity<>(
-            GenericResponse.success(itemService.create(null,dto)),
+            ResponseWrapper.success(itemService.create(null,dto)),
             HttpStatus.CREATED
         );
 
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GenericResponse<ItemResponseDTO>> update(@PathVariable Long id, @RequestBody ItemRequestDTO dto){
+    public ResponseEntity<ResponseWrapper<ItemResponseDTO>> update(@PathVariable Long id, @RequestBody ItemRequestDTO dto){
         return new ResponseEntity<>(
-            GenericResponse.success(itemService.create(id,dto)),
+            ResponseWrapper.success(itemService.create(id,dto)),
             HttpStatus.CREATED
         );
     }

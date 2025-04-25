@@ -8,6 +8,7 @@ import com.ra.orderapp_java.model.entity.JoinEntity.ItemOnOrder;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -55,5 +56,12 @@ public class Order {
 
     @OneToMany(mappedBy = "order")
     Set<ItemOnOrder> items;
+
+    // Add created_at and updated_at fields
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }
 

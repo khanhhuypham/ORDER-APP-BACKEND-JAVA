@@ -1,11 +1,13 @@
 package com.ra.orderapp_java.service.area;
 
+import com.ra.orderapp_java.advice.CustomException;
 import com.ra.orderapp_java.model.dto.area.AreaRequestDTO;
 import com.ra.orderapp_java.model.dto.area.AreaResponseDTO;
 import com.ra.orderapp_java.model.entity.Area;
 import com.ra.orderapp_java.repository.AreaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,40 +20,40 @@ public class AreaServiceImpl implements AreaService{
 
 
     @Override
-    public List<AreaResponseDTO> findAll(Boolean active) {
+    public List<Area> findAll(Boolean active) throws CustomException{
 
-        List<AreaResponseDTO> list = new ArrayList();
 
-        for(Area area : (active != null
+        return active != null
             ? areaRepo.findActiveArea(active)
-            : areaRepo.findAll()
-        )){
-            list.add(new AreaResponseDTO(area));
-        }
-        return list;
+            : areaRepo.findAll();
     }
 
 
     @Override
-    public AreaResponseDTO create(Long id,AreaRequestDTO dto) {
-        System.out.println(id);
+    public Area create(Long id,AreaRequestDTO dto) throws CustomException{
 
         Area savedArea = areaRepo.save(Area.builder()
                 .id(id)
                 .name(dto.getName())
                 .active(dto.getActive())
                 .build());
-        return new AreaResponseDTO(savedArea);
+
+        return savedArea;
     }
 
     @Override
-    public AreaResponseDTO findById(Long id){
+    public Area findById(Long id) throws CustomException{
         Area area = areaRepo.findById(id).orElse(null);
-        return area == null ? null : new AreaResponseDTO(area);
+
+        if (area == null){
+            throw new CustomException("Area not found", HttpStatus.NOT_FOUND);
+        }
+
+        return area;
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(long id) throws CustomException {
         areaRepo.deleteById(id);
     }
 }

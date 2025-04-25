@@ -1,5 +1,6 @@
 package com.ra.orderapp_java.service.order;
 
+import com.ra.orderapp_java.advice.CustomException;
 import com.ra.orderapp_java.model.constant.ITEM_ON_ORDER_STATUS;
 import com.ra.orderapp_java.model.constant.ORDER_STATUS;
 import com.ra.orderapp_java.model.constant.ORDER_TYPE;
@@ -20,11 +21,18 @@ import com.ra.orderapp_java.repository.TableRepository;
 import com.ra.orderapp_java.repository.UserRepository;
 import com.ra.orderapp_java.repository.joinEntity.ItemOnOrderRepository;
 import com.ra.orderapp_java.service.item.ItemService;
+import com.ra.orderapp_java.service.itemOnOrder.ItemOnOrderService;
+import com.ra.orderapp_java.service.payment.PaymentService;
+import com.ra.orderapp_java.service.table.TableService;
+import com.ra.orderapp_java.service.user.UserService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -39,11 +47,11 @@ import static java.util.stream.Collectors.toSet;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
     public final TableRepository tableRepo;
-    public final UserRepository userRepo;
     public final OrderRepository orderRepo;
-    public final PaymentRepository paymentRepo;
+    public final UserService userService;
+    public final PaymentService paymentService;
     public final ItemService itemService;
-    public final ItemOnOrderRepository itemOnOrderRepo;
+    public final ItemOnOrderService itemOnOrderService;
 
 
     @Override
@@ -78,91 +86,69 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public OrderResponseDTO create(Long id, OrderRequestDTO dto) {
+    public Order create(Long id, OrderRequestDTO dto) throws CustomException{
 
-        Order order = new Order();
-        Payment payment = paymentRepo.save(Payment.builder().build());
-        User user = userRepo.findById(dto.getUser_id()).orElse(null);
-        order.setPayment(payment);
-        order.setUser(user);
+        Order order = null;
 
-        if (dto.getOrder_type() == ORDER_TYPE.DINE_IN){
-            TableEntity table = tableRepo.findById(dto.getTable_id()).orElse(null);
-            if (table != null ){
-                order.setTable(table);
+        if (id == null){
+            order = new Order();
+            order.setPayment(paymentService.create(null,null));
+            order.setUser(userService.findById(dto.getUser_id()));
+
+            //only order type equal dine_in has table
+            if (dto.getOrder_type() == ORDER_TYPE.DINE_IN){
+                order.setTable(this.findTableById(dto.getTable_id()));
             }
+
+        }else{
+            order = this.findOrderById(id);
+            order.setTable(this.findTableById(dto.getTable_id()));
         }
 
-        Order savedOrder = orderRepo.save(order);
-        return new OrderResponseDTO(order);
+
+        return orderRepo.save(order);
     }
 
     @Override
-    public OrderResponseDTO saveItemToOrder(Long orderId, AddItemToOrderRequestDTO dto) {
-        Order order = orderRepo.findById(orderId).orElse(null);
-
-        if (order != null) {
-            // Precompute IDs of items already in the order for quick lookup
-            Set<Long> existingItemIds = order.getItems().stream()
-                    .map(item -> item.getItem().getId())
-                    .collect(toSet());
-
-            for (ItemOnOrderDTO element : dto.getItems()) {
-
-                Item item = itemService.findItemById(element.getId());
-
-                if (item != null){
-                    if (existingItemIds.contains(item.getId())) {
-                        // Item is already in the order
-                        ItemOnOrder itemOnOrder = itemOnOrderRepo.findByItemId(item.getId(),orderId).orElse(null);
-                        if (itemOnOrder != null) {
-                            itemOnOrder.setQuantity(element.getQuantity()); // Update the quantity
-                            itemOnOrderRepo.save(itemOnOrder); // Persist the update
-                        }
-                    } else {
-                        // Item is not in the order, create a new OrderOnItem
-                        ItemOnOrder newItemOnOrder = new ItemOnOrder(order,item,element); // Assuming constructor accepts Order and Item
-                        System.out.println(newItemOnOrder.getStatus());
-                        itemOnOrderRepo.save(newItemOnOrder);
-                    }
-                }
-            }
-        }
-       return this.findById(orderId);
+    public void saveItemToOrder(Long orderId, AddItemToOrderRequestDTO dto) throws CustomException{
+        itemOnOrderService.addItemToOrder(orderId,dto);
     }
 
     @Override
-    public OrderResponseDTO cancelItemOfOrder(Long orderId, List<CancelItemOnOrderDTO> itemList) {
-        Order order = orderRepo.findById(orderId).orElse(null);
-        if (order != null) {
-            // Precompute IDs of items already in the order for quick lookup
-            Set<Long> existingItemIds = order.getItems().stream()
-                    .map(orderOnItem -> orderOnItem.getItem().getId())
-                    .collect(toSet());
+    public void cancelItemOfOrder(Long orderId, List<CancelItemOnOrderDTO> itemList) throws CustomException{
+        itemOnOrderService.cancelItemOfOrder(orderId,itemList);
+    }
 
-            for (CancelItemOnOrderDTO cancelItem : itemList) {
-                if (existingItemIds.contains(cancelItem.getId())) {
-                    // Item is already in the order
-                    ItemOnOrder itemOnOrder = itemOnOrderRepo.findByItemId(cancelItem.getId(),orderId).orElse(null);
+    @Override
+    public void cancelOrder(Long id) throws CustomException{
+        Order order = this.findOrderById(id);
 
-                    if (itemOnOrder != null) {
-                        itemOnOrder.setStatus(ITEM_ON_ORDER_STATUS.CANCELLED);
-                        itemOnOrderRepo.save(itemOnOrder); // Persist the update
-                    }
-                }
-            }
+        System.out.println(order.getItems().stream().anyMatch(item -> {
+                System.out.println(item.getStatus());
+                return item.getStatus() != ITEM_ON_ORDER_STATUS.CANCELLED;
+            })
+        );
+
+        Boolean condition = !order.getItems().stream().anyMatch(item -> item.getStatus() != ITEM_ON_ORDER_STATUS.CANCELLED);
+//                && order.getPayment().getNet_amount() == 0;
+
+        if (condition) {
+            order.setStatus(ORDER_STATUS.CANCEL);
+            orderRepo.save(order);
+        }else{
+            throw new CustomException(
+                String.format("Unable to cancel Order with id %d", id),
+                HttpStatus.BAD_REQUEST);
         }
 
-        return this.findById(orderId);
     }
 
 
     @Override
-    public OrderResponseDTO findById(Long id) {
+    public OrderResponseDTO findOrderResponseDTOById(Long id){
 
         Order order = orderRepo.findById(id).orElse(null);
         List<ItemResponseDTO> list = new ArrayList<>();
-
 
         if (order != null){
             for(ItemOnOrder element: order.getItems()){
@@ -174,7 +160,6 @@ public class OrderServiceImpl implements OrderService{
                 item.filterPropertiesForOrDetailDTO(element);
                 list.add(item);
             }
-
         }
 
         OrderResponseDTO dto = new OrderResponseDTO(order,list);
@@ -182,5 +167,36 @@ public class OrderServiceImpl implements OrderService{
         return order == null ? null : dto;
     }
 
+    @Override
+    public Order findOrderById(Long id) throws CustomException {
+        Order order = orderRepo.findById(id).orElse(null);
+
+        if (order == null){
+            throw new CustomException("Not found", HttpStatus.NOT_FOUND);
+        }
+
+        return order;
+    }
+
+
+    @Override
+    public Order findIncompleteOrderByTableId(Long id) {
+        return orderRepo.findAllByTableId(id)
+            .stream()
+            .filter(order -> order.getStatus() != ORDER_STATUS.COMPLETE)
+            .findFirst()
+            .orElse(null);
+    }
+
+
+    private TableEntity findTableById(Long id) throws CustomException {
+        TableEntity table = tableRepo.findById(id).orElse(null);
+
+        if (table == null){
+            throw new CustomException("Not found", HttpStatus.NOT_FOUND);
+        }
+
+        return table;
+    }
 
 }

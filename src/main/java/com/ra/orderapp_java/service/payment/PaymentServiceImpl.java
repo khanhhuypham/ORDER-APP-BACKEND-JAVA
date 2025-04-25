@@ -1,10 +1,12 @@
 package com.ra.orderapp_java.service.payment;
 
+import com.ra.orderapp_java.advice.CustomException;
 import com.ra.orderapp_java.model.dto.payment.PaymentRequestDTO;
 import com.ra.orderapp_java.model.dto.payment.PaymentResponseDTO;
 import com.ra.orderapp_java.model.entity.Item;
 import com.ra.orderapp_java.model.entity.Payment;
 import com.ra.orderapp_java.repository.PaymentRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,36 +23,36 @@ public class PaymentServiceImpl implements PaymentService {
 
 
     @Override
-    public List<PaymentResponseDTO> findAll() {
-        List<PaymentResponseDTO> list = new ArrayList();
-        for(Payment payment : paymentRepo.findAll()) {
-            list.add(new PaymentResponseDTO(payment));
-        }
-        return list;
+    public List<Payment> findAll() {
+        return paymentRepo.findAll();
     }
 
     @Override
-    public PaymentResponseDTO create(Long id, PaymentRequestDTO dto) {
-        Payment payment = paymentRepo.findById(id).orElse(null);
+    public Payment create(Long id, PaymentRequestDTO dto)  throws CustomException{
+        Payment payment = null;
 
-        Payment.PaymentBuilder paymentBuilder = Payment.builder();
-
-
-        if (payment !=null){
-            paymentBuilder.id(id)
-                .discount(dto.getDiscount())
-                .tax(dto.getTax())
-                .surcharge(dto.getSurcharge())
-                .method(dto.getMethod());
+        if (id != null){
+            payment = this.findById(id);
+            payment.setDiscount(dto.getDiscount());
+            payment.setTax(dto.getTax());
+            payment.setSurcharge(dto.getSurcharge());
+            payment.setMethod(dto.getMethod());
+        }else {
+            payment = new Payment();
         }
 
-        return new PaymentResponseDTO(paymentBuilder.build());
+      return payment;
+
     }
 
     @Override
-    public PaymentResponseDTO findById(Long id) {
+    public Payment findById(Long id) throws CustomException {
         Payment payment = paymentRepo.findById(id).orElse(null);
-        return payment == null ? null : new PaymentResponseDTO(payment);
+        if (payment == null){
+            throw new CustomException("Payment not found", HttpStatus.NOT_FOUND);
+        }
+
+        return payment;
     }
 
 }

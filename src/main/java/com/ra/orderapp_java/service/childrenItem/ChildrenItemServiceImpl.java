@@ -1,5 +1,6 @@
 package com.ra.orderapp_java.service.childrenItem;
 
+import com.ra.orderapp_java.advice.CustomException;
 import com.ra.orderapp_java.model.dto.childrenItem.ChildrenItemRequestDTO;
 import com.ra.orderapp_java.model.dto.childrenItem.ChildrenItemResponseDTO;
 import com.ra.orderapp_java.model.entity.Category;
@@ -9,7 +10,10 @@ import com.ra.orderapp_java.model.entity.Unit;
 import com.ra.orderapp_java.repository.CategoryRepository;
 import com.ra.orderapp_java.repository.ChildrenItemRepository;
 import com.ra.orderapp_java.repository.UnitRepository;
+import com.ra.orderapp_java.service.category.CategoryService;
+import com.ra.orderapp_java.service.unit.UnitService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,46 +24,46 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class ChildrenItemServiceImpl implements ChildrenItemService{
     private final ChildrenItemRepository ChildrenItemRepo;
-    private final CategoryRepository categoryRepo;
-    private final UnitRepository unitRepo;
+    private final CategoryService categoryService;
+    private final UnitService unitService;
+
 
     @Override
-    public List<ChildrenItemResponseDTO> findAll() {
-        List<ChildrenItemResponseDTO> list = new ArrayList<>();
-
-        for (ChildrenItem child: ChildrenItemRepo.findAll()) {
-            list.add(new ChildrenItemResponseDTO(child));
-        }
-
-        return list;
+    public List<ChildrenItem> findAll() {
+        return ChildrenItemRepo.findAll();
     }
 
     @Override
-    public ChildrenItemResponseDTO create(Long id,ChildrenItemRequestDTO dto) {
+    public ChildrenItem create(Long id,ChildrenItemRequestDTO dto) throws CustomException {
 
-        Unit unit = unitRepo.findById(dto.getUnit_id()).orElse(null);
-        Category category = categoryRepo.findById(dto.getCategory_id()).orElse(null);
-
-        ChildrenItem child = ChildrenItemRepo.save(
+        return ChildrenItemRepo.save(
             ChildrenItem.builder()
                 .id(id)
                 .name(dto.getName())
                 .price(dto.getPrice())
                 .out_of_stock(dto.getOut_of_stock())
                 .description(dto.getDescription())
-                .category(category)
-                .unit(unit)
+                .category(categoryService.findById(dto.getCategory_id()))
+                .unit(unitService.findById(dto.getUnit_id()))
                 .build()
         );
-
-        return new ChildrenItemResponseDTO(child);
     }
 
     @Override
-    public ChildrenItemResponseDTO findById(Long id) {
+    public ChildrenItem findById(Long id) throws CustomException {
         ChildrenItem child = ChildrenItemRepo.findById(id).orElse(null);
-        return child == null ? null : new ChildrenItemResponseDTO(child);
+        if (child == null){
+            throw new CustomException("Item not found", HttpStatus.NOT_FOUND);
+        }
+
+        return child;
     }
+
+    @Override
+    public List<ChildrenItem> findByParentId(Long id) throws CustomException {
+        return ChildrenItemRepo.findByParentId(id);
+    }
+
 
     @Override
     public void delete(long id) {

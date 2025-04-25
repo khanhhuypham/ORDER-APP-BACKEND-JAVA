@@ -1,6 +1,6 @@
-package com.ra.orderapp_java.security.jwt;
+package com.ra.orderapp_java.config.security.jwt;
 
-import com.ra.orderapp_java.security.UserPrinciple;
+import com.ra.orderapp_java.config.security.UserPrinciple;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;

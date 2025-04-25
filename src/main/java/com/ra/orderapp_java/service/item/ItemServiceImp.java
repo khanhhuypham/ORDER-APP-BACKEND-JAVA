@@ -2,10 +2,7 @@ package com.ra.orderapp_java.service.item;
 
 
 import com.ra.orderapp_java.model.constant.CATEGORY_TYPE;
-import com.ra.orderapp_java.model.constant.ORDER_STATUS;
 import com.ra.orderapp_java.model.dto.PaginationDTO;
-import com.ra.orderapp_java.model.dto.childrenItem.ChildrenItemRequestDTO;
-import com.ra.orderapp_java.model.dto.childrenItem.ChildrenItemResponseDTO;
 import com.ra.orderapp_java.model.dto.item.ItemQueryDTO;
 import com.ra.orderapp_java.model.dto.item.ItemRequestDTO;
 import com.ra.orderapp_java.model.dto.item.ItemResponseDTO;
@@ -146,7 +143,6 @@ public class ItemServiceImp implements ItemService {
     @Transactional
     @Override
     public void addChildrenToItem(Item item, List<Map<String, Object>> childrenList) {
-
 
       itemOnChildrenItemRepo.deleteAllByItemId(item.getId());
 

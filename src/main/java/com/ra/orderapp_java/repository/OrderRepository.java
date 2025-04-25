@@ -5,6 +5,7 @@ import com.ra.orderapp_java.model.constant.ORDER_STATUS;
 import com.ra.orderapp_java.model.constant.ORDER_TYPE;
 import com.ra.orderapp_java.model.entity.Item;
 import com.ra.orderapp_java.model.entity.Order;
+import com.ra.orderapp_java.model.entity.TableEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,5 +34,9 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
     );
 
 
-
+    @Query(
+        "SELECT o FROM Order o " +
+        "WHERE (:id IS NULL OR o.table.id = :id) "
+    )
+    List<Order> findAllByTableId(@Param("id") Long id);
 }

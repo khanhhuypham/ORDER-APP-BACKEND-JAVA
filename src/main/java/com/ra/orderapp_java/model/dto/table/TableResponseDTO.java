@@ -19,19 +19,15 @@ import java.util.*;
 public class TableResponseDTO {
     private Long id;
     private String name;
-
     private Boolean active;
     private Long area_id;
     private Long total_slot;
     private OrderDTO order;
+    private String merge_table;
 
     public TableResponseDTO(TableEntity table) {
         this.id = table.getId();
         this.name = table.getName();
-
-//        if (table.getStatus() != null) {
-//            this.status = table.getStatus().getValue();
-//        }
 
         // Find the active order (assuming only one active order per table)
         if (table.getOrders() != null) {
@@ -46,6 +42,10 @@ public class TableResponseDTO {
         this.active = table.getActive();
         if (table.getArea() != null) {
             this.area_id = table.getArea().getId();
+        }
+
+        if (table.getMerge_tables() != null) {
+            this.merge_table = table.getMerge_tables().toString();
         }
 
         this.total_slot = table.getTotal_slot();

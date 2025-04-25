@@ -88,19 +88,64 @@ INSERT INTO area (name, active) VALUES
                                     ('RoofTop',0);
 
 
-INSERT INTO `table` (name, status,active, area_id) VALUES
-                                                       ('Table 3', 1, 1, 1),
-                                                       ('Table 4', 2, 1, 1),
-                                                       ('Table 5', 2, 1, 1),
-                                                       ('Table 6', 2, 1, 1),
-                                                       ('Table 7', 2, 1, 1),
-                                                       ('Table 8', 2, 1, 2),
-                                                       ('Table 9', 3, 1, 2),
-                                                       ('Table 10', 2, 1, 2),
-                                                       ('Table 11', 2, 1, 3),
-                                                       ('Table 12', 2, 1, 3),
-                                                       ('Table 13', 2, 1, 3),
-                                                       ('Table 14', 2, 1, 3);
+INSERT INTO `table` (name,active, area_id) VALUES
+                                               ('Table 3', 1, 1),
+                                               ('Table 4', 1, 1),
+                                               ('Table 5', 1, 1),
+                                               ('Table 6', 1, 1),
+                                               ('Table 7', 1, 1),
+                                               ('Table 8', 1, 1),
+                                               ('Table 9', 1, 1),
+                                               ('Table 10', 1, 1),
+                                               ('Table 11', 1, 1),
+                                               ('Table 12', 1, 1),
+                                               ('Table 13', 1, 1),
+                                               ('Table 14', 1, 1),
+                                               ('Table 15', 1, 1),
+                                               ('Table 16', 1, 1),
+                                               ('Table 17', 1, 1),
+                                               ('Table 18', 1, 1),
+                                               ('Table 19', 1, 1),
+                                               ('Table 20', 1, 1),
+                                               ('Table 21', 1, 2),
+                                               ('Table 22', 1, 2),
+                                               ('Table 23', 1, 2),
+                                               ('Table 24', 1, 2),
+                                               ('Table 25', 1, 2),
+                                               ('Table 26', 1, 2),
+                                               ('Table 27', 1, 2),
+                                               ('Table 28', 1, 2),
+                                               ('Table 29', 1, 2),
+                                               ('Table 30', 1, 2),
+                                               ('Table 32', 1, 2),
+                                               ('Table 33', 1, 2),
+                                               ('Table 34', 1, 2),
+                                               ('Table 35', 1, 2),
+                                               ('Table 36', 1, 2),
+                                               ('Table 37', 1, 2),
+                                               ('Table 38', 1, 2),
+                                               ('Table 39', 1, 2),
+                                               ('Table 40', 1, 2),
+                                               ('Table 41', 1, 3),
+                                               ('Table 42', 1, 3),
+                                               ('Table 43', 1, 3),
+                                               ('Table 44', 1, 3),
+                                               ('Table 45', 1, 3),
+                                               ('Table 46', 1, 3),
+                                               ('Table 47', 1, 3),
+                                               ('Table 48', 1, 3),
+                                               ('Table 49', 1, 3),
+                                               ('Table 50', 1, 3),
+                                               ('Table 51', 1, 3),
+                                               ('Table 52', 1, 3),
+                                               ('Table 53', 1, 3),
+                                               ('Table 54', 1, 3),
+                                               ('Table 55', 1, 3),
+                                               ('Table 56', 1, 3),
+                                               ('Table 57', 1, 3),
+                                               ('Table 58', 1, 3),
+                                               ('Table 59', 1, 3),
+                                               ('Table 60', 1, 3);
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -142,11 +187,11 @@ INSERT INTO unit (name) VALUES
 
 -- Insert data into the Printer table
 INSERT INTO printer (name, printer_name, ip_address, port, connection_type, print_number, is_print_each_paper, active , type) VALUES
-                                                                                                                                  ('Office Printer 1', 'HP LaserJet Pro M404', '192.168.1.100', 9100, 1, 1, 1, 1, 1),  -- Example: Network, Enabled, Laser
+                                                                                                                                  ('Office Printer 1', 'HP LaserJet Pro M404', '192.168.1.100', 9100, 1, 1, 1, 1, 1),  -- Example: Network, Enabled
                                                                                                                                   ('Kitchen Printer', 'Epson TM-T20II', '192.168.1.101', 9100, 1, 1, 0, 1, 2),  -- Example: Network, Enabled, Receipt
-                                                                                                                                  ('Shipping Label Printer', 'Zebra ZD420', '192.168.1.102', 9100, 1, 1, 1, 1, 3), -- Example: Network, Enabled, Label
-                                                                                                                                  ('Front Desk Printer', 'Brother HL-L2395DW', '192.168.1.103', 9100, 1, 2, 1, 0, 1),  -- Example: Network, Disabled, Laser
-                                                                                                                                  ('USB Printer', 'Canon Pixma TS6420', '192.168.1.103', 9100, 2, 1, 1, 1, 4);  -- Example: USB, Enabled, Inkjet
+                                                                                                                                  ('Shipping Label Printer', 'Zebra ZD420', '192.168.1.102', 9100, 1, 1, 1, 1, 4), -- Example: Network, Enabled
+                                                                                                                                  ('Front Desk Printer', 'Brother HL-L2395DW', '192.168.1.103', 9100, 1, 2, 1, 0, 1),  -- Example: Network, Disabled
+                                                                                                                                  ('USB Printer', 'Canon Pixma TS6420', '192.168.1.103', 9100, 2, 1, 1, 1, 1);  -- Example: USB, Enabled
 
 
 
@@ -522,36 +567,84 @@ INSERT INTO payment (discount, tax, surcharge, amount, net_amount, method, statu
    (5.00, 3.30, 1.70, 110.00, 109.70, 1, 0), -- Credit card, paid
    (2.00, 1.00, 0.50, 50.00, 48.50, 2, 0),-- Debit card, processing
    (3.00, 2.50, 1.50, 60.00, 61.00, 3, 0), -- Paypal, Paid
-   (0.00, 1.50, 2.00, 70.00, 73.50, 4, 0);
+   (0.00, 1.50, 2.00, 70.00, 73.50, 4, 0),
+   (0.00, 5.00, 2.50, 200.00, 127.50, 1, 1),  -- Credit Card, Paid
+   (10.00, 2.00, 1.00, 500.00, 423.00, 2, 1),   -- Debit Card, Paid
+   (5.00, 7.00, 0.00, 755.00, 727.00, 3, 1),   -- PayPal, Paid
+   (0.00, 6.50, 3.00, 120.00, 2329.50, 4, 1), -- Cash, Pending
+   (2.50, 3.50, 1.50, 6220.00, 622.50, 1, 1),  -- Credit Card, Processing
+   (7.50, 1.00, 0.50, 4220.00, 354.00, 2, 1),   -- Debit Card, Failed
+   (3.00, 8.00, 2.00, 9770.00, 937.00, 3, 1),   -- PayPal, Paid
+   (0.00, 4.00, 1.00, 8750.00, 8565.00, 4, 1), -- Cash, Pending
+   (1.00, 5.50, 0.00, 7560.00, 7974.50, 1, 1),  -- Credit Card, Processing
+   (5.00, 2.50, 0.75, 3335.00, 3553.25, 2, 1),   -- Debit Card, Paid
+   (2.00, 6.00, 1.00, 1140.00, 16515.00, 3, 1),-- Paypal, Paid
+   (0.50, 3.00, 0.50, 9345.00, 9768.00, 4, 1),-- Cash, pending
+   (6.00, 2.00, 0.25, 4465.00, 4741.25, 2, 1), -- Debit card, Failed
+   (1.50, 4.50, 1.75, 6345.00, 6439.75,1, 1),-- credit card, paid
+   (0.75, 5.25, 2.25, 7648.00, 82344.50,3, 1),-- paypal, processing
+   (3.50, 3.75, 0.00, 8638.00, 85468.25, 4,1), -- cash, paid
+   (4.20, 1.50, 2.70, 5335.00, 54545.00,1,1),-- Credit card, processing
+   (1.20, 6.50, 0.50, 12775.00, 13440.80,2,1),-- Debit card, pending
+   (2.50,3.00,1.25,7447.00,7448.75,3, 1), -- Paypal, failed
+   (1.00, 4.75, 0.75, 9330.00, 9234.50,4,1), -- Cash, paid
+   (5.00, 3.30, 1.70, 11430.00, 1409.70, 1, 1), -- Credit card, paid
+   (2.00, 1.00, 0.50, 5330.00, 4238.50, 2, 1),-- Debit card, processing
+   (3.00, 2.50, 1.50, 3460.00, 34361.00, 3, 1), -- Paypal, Paid
+   (0.00, 1.50, 2.00,23270.00, 33473.50, 4, 1);
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 -- order
 INSERT INTO `order` (user_id, payment_id, status, type, using_slot, using_time, table_id) VALUES
-  (1, 1, 1, 0, NULL, NULL, 1),  -- User 1, Payment 1, Pending, Table 3
-  (2, 2, 2, 0, NULL, NULL, 2),  -- User 2, Payment 2, Processing, Table 4
-  (3, 3, 3, 0, NULL, NULL, 3),  -- User 3, Payment 3, Shipped, Table 5
-  (4, 4, 4, 0, NULL, NULL, 4),  -- User 4, Payment 4, Completed, Table 6
-  (5, 5, 1, 0, NULL, NULL, 5),  -- User 5, Payment 5, Pending, Table 7
-  (6, 6, 2, 0, 1, '10:30', 6),  -- User 6, Payment 6, Processing, Table 8, With using_slot & using_time
-  (7, 7, 3, 0, 2, '11:30', 7),  -- User 7, Payment 7, Shipped, Table 9, With using_slot & using_time
-  (8, 8, 4, 0, 3, '12:30', 8),  -- User 8, Payment 8, Completed, Table 10, With using_slot & using_time
-  (9, 9, 1, 0, NULL, NULL, 9),  -- User 9, Payment 9, Pending, Table 11
-  (10, 10, 2, 0, NULL, NULL, 10), -- User 10, Payment 10, Processing, Table 12
-  (1, 11, 3, 0, NULL, NULL, 11), -- User 1, Payment 11, Shipped, Table 13
-  (2, 12, 4, 0, NULL, NULL, 12), -- User 2, Payment 12, Completed, Table 14
-  (3, 13, 1, 0, NULL, NULL, 1), -- User 3, Payment 13, Pending, No Table
-  (4, 14, 2, 0, NULL, NULL, 2), -- User 4, Payment 14, Processing, No Table
-  (5, 15, 3, 0, NULL, NULL, NULL), -- User 5, Payment 15, Shipped, No Table
-  (6, 16, 4, 0, NULL, NULL, NULL), -- User 6, Payment 16, Completed, No Table
-  (7, 17, 1, 0, NULL, NULL, NULL), -- User 7, Payment 17, Pending, No Table
-  (8, 18, 2, 0, NULL, NULL, NULL), -- User 8, Payment 18, Processing, No Table
-  (9, 19, 3, 0, NULL, NULL, NULL), -- User 9, Payment 19, Shipped, No Table
-  (10, 20, 4, 0, NULL, NULL, NULL),-- User 10, Payment 20, Completed, No Table
-  (3, 21, 2, 0, NULL, NULL, NULL),  -- User 3, Payment 21, Processing (Added one more row), No Table
-  (5, 22, 3, 0, NULL, NULL, NULL), -- User 5, Payment 22, Shipped (Added one more row), No Table
-  (1, 23, 4, 0, NULL, NULL, NULL), -- User 1, Payment 23, Completed (Added one more row), No Table
-  (2, 24, 1, 0, NULL, NULL, NULL); -- User 2, payment 24, pending, No Table
+  (1, 1, 0, 0, NULL, NULL, 1),  -- User 1, Payment 1, open, Table 1
+  (2, 2, 0, 0, NULL, NULL, 2),  -- User 2, Payment 2, open, Table 2
+  (3, 3, 0, 0, NULL, NULL, 3),  -- User 3, Payment 3, open, Table 3
+  (4, 4, 0, 0, NULL, NULL, 4),  -- User 4, Payment 4, open, Table 4
+  (5, 5, 0, 0, NULL, NULL, 5),  -- User 5, Payment 5, open, Table 5
+  (6, 6, 0, 0, 1, '10:30', 6),  -- User 6, Payment 6, open, Table 6, With using_slot & using_time
+  (7, 7, 0, 0, 2, '11:30', 7),  -- User 7, Payment 7, open, Table 7, With using_slot & using_time
+  (8, 8, 0, 0, 3, '12:30', 8),  -- User 8, Payment 8, open, Table 8, With using_slot & using_time
+  (9, 9, 0, 0, NULL, NULL, 9),  -- User 9, Payment 9, open, Table 9
+  (10, 10, 0, 0, NULL, NULL, 10), -- User 10, Payment 10, open, Table 10
+  (1, 11, 5, 0, NULL, NULL, 11), -- User 1, Payment 11, Cancel, Table 11
+  (2, 12, 1, 0, NULL, NULL, 12), -- User 2, Payment 12, payment request, Table 12
+  (3, 13, 1, 0, NULL, NULL, 13), -- User 3, Payment 13, complete, No Table
+  (4, 14, 0, 0, NULL, NULL, 14), -- User 4, Payment 14, complete, No Table
+  (5, 15, 0, 0, NULL, NULL, 15), -- User 5, Payment 15, complete, No Table
+  (6, 16, 0, 0, NULL, NULL, 16), -- User 6, Payment 16, complete, No Table
+  (7, 17, 0, 0, NULL, NULL, 17), -- User 7, Payment 17, complete, No Table
+  (8, 18, 0, 0, NULL, NULL, 18), -- User 8, Payment 18, complete, No Table
+  (9, 19, 0, 0, NULL, NULL, 19), -- User 9, Payment 19, complete, No Table
+  (10, 20, 0, 0, NULL, NULL, 20),-- User 10, Payment 20, complete, No Table
+  (3, 21, 0, 0, NULL, NULL, 21),  -- User 3, Payment 21, complete, No Table
+  (5, 22, 0, 0, NULL, NULL, 22), -- User 5, Payment 22, complete, No Table
+  (1, 23, 4, 0, NULL, NULL, 23), -- User 1, Payment 23, complete, No Table
+  (2, 24, 4, 0, NULL, NULL, 24), -- User 2, payment 24, complete, No Table
+   (1, 25, 2, 0, NULL, NULL, null),  -- User 1, Payment 1, open, Table 1
+  (2, 26, 2, 0, NULL, NULL, null),  -- User 2, Payment 2, open, Table 2
+  (3, 27, 2, 0, NULL, NULL, null),  -- User 3, Payment 3, open, Table 3
+  (4, 28, 2, 0, NULL, NULL, null),  -- User 4, Payment 4, open, Table 4
+  (5, 29, 2, 0, NULL, NULL, null),  -- User 5, Payment 5, open, Table 5
+  (6, 30, 2, 0, 1, '10:30', null),  -- User 6, Payment 6, open, Table 6, With using_slot & using_time
+  (7, 31, 2, 0, 2, '11:30', null),  -- User 7, Payment 7, open, Table 7, With using_slot & using_time
+  (8, 32, 2, 0, 3, '12:30',null),  -- User 8, Payment 8, open, Table 8, With using_slot & using_time
+  (9, 33, 2, 0, NULL, NULL, null),  -- User 9, Payment 9, open, Table 9
+  (10, 34, 2, 0, NULL, NULL, null), -- User 10, Payment 10, open, Table 10
+  (1, 35, 2, 0, NULL, NULL, null), -- User 1, Payment 11, Cancel, Table 11
+  (2, 36, 2, 0, NULL, NULL, null), -- User 2, Payment 12, payment request, Table 12
+  (3, 37, 2, 0, NULL, NULL, null), -- User 3, Payment 13, complete, No Table
+  (4, 38, 2, 0, NULL, NULL, null), -- User 4, Payment 14, complete, No Table
+  (5, 39, 2, 0, NULL, NULL, null), -- User 5, Payment 15, complete, No Table
+  (6, 40, 2, 0, NULL, NULL, null), -- User 6, Payment 16, complete, No Table
+  (7, 41, 2, 0, NULL, NULL, null), -- User 7, Payment 17, complete, No Table
+  (8, 42, 2, 0, NULL, NULL, null), -- User 8, Payment 18, complete, No Table
+  (9, 43, 2, 0, NULL, NULL, null), -- User 9, Payment 19, complete, No Table
+  (10, 44,2, 0, NULL, NULL, null),-- User 10, Payment 20, complete, No Table
+  (3, 45, 2, 0, NULL, NULL, null),  -- User 3, Payment 21, complete, No Table
+  (5, 46, 2, 0, NULL, NULL, null), -- User 5, Payment 22, complete, No Table
+  (1, 47, 2, 0, NULL, NULL, null), -- User 1, Payment 23, complete, No Table
+  (2, 48, 2, 0, NULL, NULL, null); -- User 2, payment 24, complete, No Table
 
 
 
@@ -696,87 +789,15 @@ INSERT INTO rating (user_id, branch_id, rating) VALUES
 
 
 
-SELECT User.name, User.email
-FROM User
-         JOIN `Order` ON User.id = `Order`.user_id;
 
-
-SELECT * FROM `Area`;
-
-SELECT `Order`.id, `Order`.order_total, `Order`.status
-FROM `Order`
-         JOIN User ON `Order`.user_id = User.id
-WHERE User.email = 'johndoe@example.com';
 
 SELECT `order`.id, `order`.status, `order`.`type`,
-       `table`.name  as table_name,`table`.id  as table_id,
-       payment.net_amount
+payment.net_amount
 FROM `order`
-         JOIN order_table joinTable1 ON joinTable1.order_id = `order`.id
-         JOIN `table` ON `table`.id = joinTable1.table_id
-         JOIN payment ON `order`.payment_id = payment.id;
+LEFT JOIN `table` ON `table`.id = `order`.table_id
+JOIN payment ON `order`.payment_id = payment.id
+WHERE `order`.status IN (2,5);
 
-SELECT `order`.id as order_id ,
-       item.name,
-       item_on_children_item.*
-FROM `order`
-         JOIN order_item  ON order_item.order_id = `order`.id
-         JOIN item  on item.id = order_item.item_id
-         JOIN item_on_children_item on item_on_children_item.item_id = item.id
-WHERE `order`.id = 1;
-
-
-
-SELECT *
-FROM item
-WHERE item.category_type = 7;
-
-SELECT Restaurants.name, AVG(Rating.rating) as avg_rating, COUNT(Rating.rating) as rating_count
-FROM Restaurants
-         JOIN Rating ON Restaurants.id = Rating.restaurant_id
-GROUP BY Restaurants.name;
-
-SELECT Menu.name, COUNT(Orders.menu_id) as times_ordered
-FROM Menu
-         JOIN Orders ON Menu.id = Orders.menu_id
-GROUP BY Menu.name
-ORDER BY times_ordered DESC
-    LIMIT 10;
-
-select * from area a  where id IN (1,2,3)
-
-
-SELECT Users.first_name, Users.last_name, Users.email, SUM(Orders.total) as total_spent
-FROM Users
-         JOIN Orders ON Users.id = Orders.user_id
-         JOIN Restaurants ON Orders.restaurant_id = Restaurants.id
-WHERE Restaurants.name = 'Pizza Palace'
-GROUP BY Users.email;
-
-
-SELECT Drivers.name, Drivers.phone
-FROM Drivers
-         JOIN Orders ON Drivers.id = Orders.driver_id
-GROUP BY Drivers.id
-HAVING COUNT(Orders.id) > 20;
-
-
-SELECT Drivers.name, Drivers.phone
-FROM Drivers
-         JOIN Orders ON Drivers.id = Orders.driver_id
-         JOIN Rating ON Orders.id = Rating.order_id
-GROUP BY Drivers.id
-HAVING COUNT(Orders.id) > 20 AND AVG(Rating.rating) >= 4;
-
-
-SELECT Restaurants.name
-FROM Restaurants
-WHERE Restaurants.id NOT IN (
-    SELECT DISTINCT Orders.restaurant_id
-    FROM Orders
-             JOIN Users ON Orders.user_id = Users.id
-    WHERE Users.email = 'johndoe@example.com'
-);
 
 
 

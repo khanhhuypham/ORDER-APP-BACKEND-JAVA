@@ -1,19 +1,17 @@
 package com.ra.orderapp_java.service.printer;
 
-import com.ra.orderapp_java.model.dto.area.AreaResponseDTO;
+import com.ra.orderapp_java.advice.CustomException;
 import com.ra.orderapp_java.model.dto.printer.PrinterRequestDTO;
 import com.ra.orderapp_java.model.dto.printer.PrinterResponseDTO;
-import com.ra.orderapp_java.model.dto.table.TableResponseDTO;
-import com.ra.orderapp_java.model.entity.Area;
 import com.ra.orderapp_java.model.entity.Printer;
-import com.ra.orderapp_java.model.entity.TableEntity;
-import com.ra.orderapp_java.repository.AreaRepository;
 import com.ra.orderapp_java.repository.PrinterRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -22,36 +20,34 @@ public class PrinterServiceImpl implements PrinterService{
 
 
     @Override
-    public List<PrinterResponseDTO> findAll() {
-
-        List<PrinterResponseDTO> list = new ArrayList();
-        for(Printer printer : printerRepo.findAll()) {
-            list.add(new PrinterResponseDTO(printer));
-        }
-        return list;
+    public List<Printer> findAll() {
+        return printerRepo.findAll();
     }
 
     @Override
-    public PrinterResponseDTO create(Long id,PrinterRequestDTO dto) {
-        Printer printer = printerRepo.save(Printer.builder()
-                .id(id)
-                .name(dto.getName())
-                .printer_name(dto.getPrinter_name())
-                .ip_address(dto.getIp_address())
-                .port(dto.getPort())
-                .connection_type(dto.getConnection_type())
-                .print_number(dto.getPrint_number())
-                .is_print_each_paper(dto.getIs_print_each_paper())
-                .active(dto.getActive())
-                .type(dto.getType())
-                .build());
-        return new PrinterResponseDTO(printer);
+    public Printer create(Long id,PrinterRequestDTO dto) {
+        return printerRepo.save(Printer.builder()
+            .id(id)
+            .name(dto.getName())
+            .printer_name(dto.getPrinter_name())
+            .ip_address(dto.getIp_address())
+            .port(dto.getPort())
+            .connection_type(dto.getConnection_type())
+            .print_number(dto.getNumber_of_copies())
+            .is_print_each_paper(dto.getIs_print_each_paper())
+            .active(dto.getActive())
+            .type(dto.getType())
+            .build());
     }
 
     @Override
-    public PrinterResponseDTO findById(Long id) {
+    public Printer findById(Long id) throws CustomException {
         Printer printer = printerRepo.findById(id).orElse(null);
-        return printer == null ? null : new PrinterResponseDTO(printer);
+        if (printer == null){
+            throw new CustomException("Printer not found", HttpStatus.NOT_FOUND);
+        }
+
+        return printer;
     }
 
     @Override

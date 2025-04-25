@@ -1,10 +1,13 @@
-package com.ra.orderapp_java.security;
+package com.ra.orderapp_java.config.security;
 
 
-import com.ra.orderapp_java.security.jwt.CustomAccessDeniedHandler;
-import com.ra.orderapp_java.security.jwt.JwtAuthTokenFilter;
-import com.ra.orderapp_java.security.jwt.JwtEntryPoint;
+import com.ra.orderapp_java.config.security.jwt.CustomAccessDeniedHandler;
+import com.ra.orderapp_java.config.security.jwt.JwtAuthTokenFilter;
+import com.ra.orderapp_java.config.security.jwt.JwtEntryPoint;
+import com.ra.orderapp_java.filter.CustomURLFilter;
+import com.ra.orderapp_java.interceptor.Interceptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -18,15 +21,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-
-import java.util.Arrays;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig {
+public class WebSecurityConfig implements WebMvcConfigurer {
     @Autowired
     private UserDetailService userDetailService;
 
@@ -56,6 +58,8 @@ public class WebSecurityConfig {
     }
 
 
+
+
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
@@ -82,7 +86,7 @@ public class WebSecurityConfig {
     }
 
 
-
+//
 //    @Bean
 //    CorsConfigurationSource corsConfigurationSource() {
 //        CorsConfiguration configuration = new CorsConfiguration();
@@ -94,4 +98,22 @@ public class WebSecurityConfig {
 //        source.registerCorsConfiguration("/**", configuration);
 //        return source;
 //    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new Interceptor())
+                .addPathPatterns("/**");
+    }
+
+
+    @Bean
+    public FilterRegistrationBean<CustomURLFilter> filterRegistrationBean() {
+        FilterRegistrationBean<CustomURLFilter> registrationBean = new FilterRegistrationBean<>();
+        CustomURLFilter customURLFilter = new CustomURLFilter();
+
+        registrationBean.setFilter(customURLFilter);
+        registrationBean.addUrlPatterns("/greeting/*");
+        registrationBean.setOrder(2);  //set precedence
+        return registrationBean;
+    }
 }

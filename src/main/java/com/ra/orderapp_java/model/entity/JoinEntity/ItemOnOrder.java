@@ -79,7 +79,6 @@ public class ItemOnOrder {
         this.discount_percent = dto.getDiscount_percent();
         this.note = dto.getNote();
 
-
         // Set default status when add new item to order
         this.status = ITEM_ON_ORDER_STATUS.WAITING_PROCESS; // Default value explicitly set here
     }
